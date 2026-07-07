@@ -444,7 +444,8 @@ export class Character
         this.jumpCooldown = Math.max(0, this.jumpCooldown - delta)
         this.shooting.cooldown = Math.max(0, this.shooting.cooldown - delta)
 
-        if(this.wantsToShoot)
+        // Buffered: a shot requested during cooldown fires as soon as it ends
+        if(this.wantsToShoot && this.shooting.cooldown === 0)
         {
             this.wantsToShoot = false
             if(!this.health.dead)
