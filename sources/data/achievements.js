@@ -100,6 +100,38 @@ export default
         5
     ],
     [
+        'onFoot',
+        'Stretching my legs',
+        'Step out of the truck.',
+        1
+    ],
+    [
+        'kills',
+        'Pest control',
+        'Take down <strong>10</strong> havoc raiders.',
+        10
+    ],
+    [
+        'kills',
+        'Raider bane',
+        'Take down <strong>50</strong> havoc raiders.',
+        50
+    ],
+    [
+        'story',
+        'It begins',
+        'Clear the first <strong>story</strong> chapter.',
+        1,
+        true // Unique
+    ],
+    [
+        'story',
+        'King of nothing',
+        'Finish the <strong>Neon Havoc</strong> story.',
+        5,
+        true // Unique
+    ],
+    [
         'sea',
         'Under the sea',
         'Go make friend with the fishes.',

@@ -30,6 +30,7 @@ import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
 import { Base } from './Base.js'
 import { Citizens } from './Citizens.js'
+import { Scatter } from './Scatter.js'
 
 export class World
 {
@@ -82,6 +83,7 @@ export class World
             this.areas = new Areas()
             this.base = new Base()
             this.citizens = new Citizens()
+            this.scatter = new Scatter()
         }
         else if(step === 2)
         {

@@ -72,6 +72,8 @@
                 <div class="brand">NEON HAVOC</div>
                 <div class="cash"><span class="js-cash-value">0</span> CR</div>
             </div>
+            <div class="health"><div class="js-health-fill fill"></div></div>
+            <div class="js-story-line story-line"></div>
             <div class="js-mission-panel mission-panel is-hidden">
                 <div class="js-mission-name name"></div>
                 <div class="js-mission-objective objective"></div>
@@ -80,7 +82,11 @@
                     <span class="js-mission-progress progress"></span>
                 </div>
             </div>
+            <div class="js-foot-hint foot-hint is-hidden">G enter truck · C camera · X shoot · SPACE jump</div>
         </div>
+
+        <!-- Damage flash -->
+        <div class="js-damage-flash damage-flash"></div>
 
         <!-- Menu trigger -->
         <button class="js-menu-trigger menu-trigger">
@@ -429,6 +435,22 @@
                                                         <tr>
                                                             <td><span class="key">H</span></td>
                                                             <td>Honk</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="key">G</span></td>
+                                                            <td>Get out of / into the truck</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="key">C</span></td>
+                                                            <td>First / third person camera</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="key">X</span> or <span class="key">LEFT CLICK</span></td>
+                                                            <td>Shoot</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="key">SPACE</span> (on foot)</td>
+                                                            <td>Jump</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

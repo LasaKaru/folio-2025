@@ -49,6 +49,9 @@ import { Options } from './Options.js'
 import gsap from 'gsap'
 import { Map } from './Map.js'
 import { Missions } from './Missions.js'
+import { Character } from './Character.js'
+import { Enemies } from './Enemies.js'
+import { Story } from './Story.js'
 
 export class Game
 {
@@ -202,6 +205,9 @@ export class Game
         // this.monitoring = new Monitoring()
         this.world.step(1)
         this.missions = new Missions()
+        this.character = new Character()
+        this.enemies = new Enemies()
+        this.story = new Story()
         this.overlay = new Overlay()
 
         // Pre-render if quality high

@@ -33,6 +33,42 @@
         font-size 1.1rem
         color #ffd23f
 
+    .health
+        margin-top 8px
+        width 190px
+        height 8px
+        border-radius 4px
+        background alpha(#ffffff, 0.15)
+        overflow hidden
+
+        .fill
+            width 100%
+            height 100%
+            border-radius 4px
+            background linear-gradient(90deg, #54ff9f, #00e5ff)
+            transform-origin 0 50%
+            transition transform 0.2s
+
+            &.is-low
+                background linear-gradient(90deg, #ff4a6b, #ff2ea0)
+
+    .story-line
+        margin-top 6px
+        font-size 0.7rem
+        font-weight 700
+        letter-spacing 0.5px
+        color #b56bff
+        text-transform uppercase
+
+    .foot-hint
+        margin-top 8px
+        font-size 0.65rem
+        opacity 0.7
+        transition opacity 0.3s
+
+        &.is-hidden
+            opacity 0
+
     .mission-panel
         margin-top 10px
         padding 12px 16px
@@ -77,6 +113,26 @@
                 font-weight 700
                 font-size 1rem
                 color #ff2ea0
+
+.damage-flash
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    pointer-events none
+    z-index 3
+    opacity 0
+    background radial-gradient(ellipse at center, transparent 55%, alpha(#ff1d3d, 0.55) 100%)
+
+    &.is-active
+        animation havoc-damage-flash 0.45s ease-out
+
+@keyframes havoc-damage-flash
+    0%
+        opacity 1
+    100%
+        opacity 0
 
 .notifications
     .notification

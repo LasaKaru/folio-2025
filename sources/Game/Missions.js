@@ -154,6 +154,16 @@ export class Missions
         this.hud.cashValue.textContent = this.cash.toLocaleString('en-US')
     }
 
+    addCash(amount)
+    {
+        this.cash += amount
+        this.save()
+        this.updateCashHud()
+
+        if(this.game.achievements.groups.get('cash') && this.cash > this.game.achievements.groups.get('cash').progress)
+            this.game.achievements.setProgress('cash', this.cash)
+    }
+
     createMarker(type, position, baseY = 0)
     {
         const group = new THREE.Group()
@@ -379,9 +389,18 @@ export class Missions
         this.setStartMarkersVisible(true)
     }
 
+    getPlayerPosition()
+    {
+        // On foot, the character is the player
+        if(this.game.character && this.game.character.active)
+            return this.game.character.position
+
+        return this.game.player.position
+    }
+
     testHit(point, baseY, radius)
     {
-        const playerPosition = this.game.player.position
+        const playerPosition = this.getPlayerPosition()
         const distance = Math.hypot(playerPosition.x - point.x, playerPosition.z - point.z)
 
         return distance < radius && playerPosition.y > baseY - 2 && playerPosition.y < baseY + 6
