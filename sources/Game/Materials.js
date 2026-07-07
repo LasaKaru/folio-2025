@@ -57,9 +57,9 @@ export class Materials
         const context = canvas.getContext('2d')
 
         const colors = [
-            { stop: 0, value: '#ffb646' },
-            { stop: 0.5, value: '#ff347e' },
-            { stop: 1, value: '#01005f' },
+            { stop: 0, value: '#ffd23f' },
+            { stop: 0.5, value: '#ff2ea0' },
+            { stop: 1, value: '#12006b' },
         ]
 
         const update = () =>

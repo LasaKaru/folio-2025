@@ -1,6 +1,19 @@
-# Folio 2025
+# Neon Havoc
 
-![image info](./static/social/share-image.png)
+An open-world neon driving game: missions, citizens, credits and one very bouncy truck.
+
+Built as a heavily remixed edition of [Bruno Simon's folio-2025](https://github.com/brunosimon/folio-2025) (MIT license) — recolored to a neon night-city vibe and expanded into a full game.
+
+## What's new vs the original
+
+- **Full recolor** — retinted model palette (`scripts/retheme-palette.js`), neon day cycles, terrain, trees, grid and UI
+- **Missions** — 10 missions across the island (checkpoint sprints, orb collections, timed deliveries) with rewards in credits, a mission HUD and dedicated achievements. Drive into a blue beacon to start one
+- **Citizens** — low-poly pedestrians strolling around town; they flee the truck and dive out of the way
+- **The Havoc Compound** — a walled home base south of downtown with watchtowers, a helipad, a stunt ramp and its own respawn point
+- **New options** — citizens on/off, Neon/Classic color theme, mission HUD toggle
+- **Rebranded** — new name, texts, console art and metadata
+
+> Note: `static/palette.png` was retinted. For compressed builds, regenerate `static/palette.ktx` with `npm run compress` (requires [KTX-Software](https://github.com/KhronosGroup/KTX-Software)).
 
 ## Setup
 

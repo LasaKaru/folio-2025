@@ -61,6 +61,45 @@ export default
         1
     ],
     [
+        'missions',
+        'Rookie of Neon Havoc',
+        'Complete your first <strong>mission</strong>.',
+        1,
+        true // Unique
+    ],
+    [
+        'missions',
+        'Made Man',
+        'Complete <strong>5</strong> different missions.',
+        5,
+        true // Unique
+    ],
+    [
+        'missions',
+        'King of the Island',
+        'Complete every <strong>mission</strong>.',
+        10,
+        true // Unique
+    ],
+    [
+        'cash',
+        'First paycheck',
+        'Earn <strong>1000</strong> credits.',
+        1000
+    ],
+    [
+        'cash',
+        'Neon tycoon',
+        'Earn <strong>5000</strong> credits.',
+        5000
+    ],
+    [
+        'bump',
+        'Excuse me, coming through!',
+        'Startle <strong>5</strong> citizens off their feet.',
+        5
+    ],
+    [
         'sea',
         'Under the sea',
         'Go make friend with the fishes.',

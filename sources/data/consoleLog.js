@@ -1,35 +1,28 @@
 import * as THREE from 'three/webgpu'
 
 const text = `
-██████╗ ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ██╗███████╗                   
-██╔══██╗██╔══██╗██║   ██║████╗  ██║██╔═══██╗╚═╝██╔════╝                   
-██████╔╝██████╔╝██║   ██║██╔██╗ ██║██║   ██║   ███████╗                   
-██╔══██╗██╔══██╗██║   ██║██║╚██╗██║██║   ██║   ╚════██║                   
-██████╔╝██║  ██║╚██████╔╝██║ ╚████║╚██████╔╝   ███████║                   
-╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝    ╚══════╝                   
-                                                                       
-██████╗  ██████╗ ██████╗ ████████╗███████╗ ██████╗ ██╗     ██╗ ██████╗ 
-██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔═══██╗██║     ██║██╔═══██╗
-██████╔╝██║   ██║██████╔╝   ██║   █████╗  ██║   ██║██║     ██║██║   ██║
-██╔═══╝ ██║   ██║██╔══██╗   ██║   ██╔══╝  ██║   ██║██║     ██║██║   ██║
-██║     ╚██████╔╝██║  ██║   ██║   ██║     ╚██████╔╝███████╗██║╚██████╔╝
-╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝ 
+███╗   ██╗███████╗ ██████╗ ███╗   ██╗
+████╗  ██║██╔════╝██╔═══██╗████╗  ██║
+██╔██╗ ██║█████╗  ██║   ██║██╔██╗ ██║
+██║╚██╗██║██╔══╝  ██║   ██║██║╚██╗██║
+██║ ╚████║███████╗╚██████╔╝██║ ╚████║
+╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═══╝
+
+██╗  ██╗ █████╗ ██╗   ██╗ ██████╗  ██████╗
+██║  ██║██╔══██╗██║   ██║██╔═══██╗██╔════╝
+███████║███████║██║   ██║██║   ██║██║
+██╔══██║██╔══██║╚██╗ ██╔╝██║   ██║██║
+██║  ██║██║  ██║ ╚████╔╝ ╚██████╔╝╚██████╗
+╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝   ╚═════╝  ╚═════╝
 
 ╔═ Intro ═══════════════╗
-║ Thank you for visiting my portfolio, you sneaky developer!
-║ If you are curious about the stack and how I built this project, here’s everything you need to know.
+║ Welcome to Neon Havoc, you sneaky developer!
+║ An open-world neon driving game: missions, citizens, credits and one very bouncy truck.
 ╚═══════════════════════╝
 
-╔═ Socials ═══════════════╗
-║ Mail           ⇒ simon.bruno.77@gmail.com
-║ X              ⇒ https://x.com/bruno_simon
-║ BlueSKy        ⇒ https://bsky.app/profile/bruno-simon.bsky.social
-║ Discord public ⇒ https://discord.com/channels/769928116701233152/1445064878384480288
-║ Discord PM     ⇒ https://discord.com/users/202907325722263553
-║ Youtube        ⇒ https://www.youtube.com/@BrunoSimon
-║ Twitch         ⇒ https://www.twitch.tv/bruno_simon_dev
-║ GitHub         ⇒ https://github.com/brunosimon
-║ LinkedIn       ⇒ https://www.linkedin.com/in/simonbruno77/
+╔═ Credits ═════════════╗
+║ Neon Havoc is a remix of Bruno Simon's open-source folio-2025 (MIT license).
+║ Original ⇒ https://github.com/brunosimon/folio-2025
 ╚═══════════════════════╝
 
 ╔═ Debug ═══════════════╗
@@ -38,7 +31,7 @@ const text = `
 ╚═══════════════════════╝
 
 ╔═ Three.js ════════════╗
-║ Three.js is the library I’m using to render this 3D world (release: ${THREE.REVISION})
+║ Three.js is the library rendering this 3D world (release: ${THREE.REVISION})
 ║ https://threejs.org/
 ║ It was created by mr.doob (https://x.com/mrdoob, https://github.com/mrdoob),
 ║ followed by hundreds of awesome developers,

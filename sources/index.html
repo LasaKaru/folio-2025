@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bruno's</title>
+    <title>Neon Havoc</title>
 
-    <meta name="description" content="Bruno Simon's creative portfolio">
+    <meta name="description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
 
-    <meta itemprop="name" content="Bruno Simon">
-    <meta itemprop="description" content="Bruno Simon's creative portfolio">
-    <meta itemprop="image" content="https://bruno-simon.com/social/share-image.png?cb=a">
+    <meta itemprop="name" content="Neon Havoc">
+    <meta itemprop="description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
+    <meta itemprop="image" content="social/share-image.png?cb=a">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bruno Simon">
-    <meta name="twitter:description" content="Bruno Simon's creative portfolio">
-    <meta name="twitter:image" content="https://bruno-simon.com/social/share-image.png?cb=a">
+    <meta name="twitter:title" content="Neon Havoc">
+    <meta name="twitter:description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
+    <meta name="twitter:image" content="social/share-image.png?cb=a">
 
-    <meta property="og:site_name" content="Three.js Journey">
+    <meta property="og:site_name" content="Neon Havoc">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://bruno-simon.com/">
-    <meta property="og:title" content="Bruno Simon">
-    <meta property="og:description" content="Bruno Simon's creative portfolio">
-    <meta property="og:image" content="https://bruno-simon.com/social/share-image.png?cb=a">
+    <meta property="og:title" content="Neon Havoc">
+    <meta property="og:description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
+    <meta property="og:image" content="social/share-image.png?cb=a">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +32,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicons/favicon.svg" loading="lazy" />
     <link rel="shortcut icon" href="/favicons/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Bruno's" />
+    <meta name="apple-mobile-web-app-title" content="Neon Havoc" />
     <link rel="manifest" href="/favicons/site.webmanifest" />
 
     <link rel="preload" href="/respawns/respawnsReferences-compressed.glb" as="fetch" crossorigin>
@@ -41,15 +40,6 @@
     <link rel="preload" href="/intro/sound.ktx" as="fetch" crossorigin>
     <link rel="preload" href="/palette.ktx" as="fetch" crossorigin>
     
-    <!-- Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JMSN30BQ5J"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', '%VITE_ANALYTICS_TAG%');
-    </script>
 </head>
 <body>
 
@@ -73,6 +63,22 @@
                 <button data-name="next" class="js-button next"></button>
                 <button data-name="open" class="js-button open"></button>
                 <button data-name="close" class="js-button close"></button>
+            </div>
+        </div>
+
+        <!-- Havoc HUD -->
+        <div class="js-havoc-hud havoc-hud">
+            <div class="top-row">
+                <div class="brand">NEON HAVOC</div>
+                <div class="cash"><span class="js-cash-value">0</span> CR</div>
+            </div>
+            <div class="js-mission-panel mission-panel is-hidden">
+                <div class="js-mission-name name"></div>
+                <div class="js-mission-objective objective"></div>
+                <div class="stats">
+                    <span class="js-mission-timer timer">0:00</span>
+                    <span class="js-mission-progress progress"></span>
+                </div>
             </div>
         </div>
 
@@ -224,11 +230,10 @@
                         <!-- Intro -->
                         <div class="js-content content home-content">
                             <div class="content-inner">
-                                <div class="title">Bruno's Home</div>
-                                <p class="text">Welcome!</p>
-                                <p class="text">My name is <strong>Bruno Simon</strong>, and I'm a <strong>creative developer</strong> (mostly for the web).</p>
-                                <p class="text">This is my portfolio. Please drive around to learn more about me and discover the many secrets of this world.</p>
-                                <p class="text">And don't break anything!</p>
+                                <div class="title">Neon Havoc</div>
+                                <p class="text">Welcome to <strong>Neon Havoc</strong> — an open-world neon island where the streets glow and the truck never sleeps.</p>
+                                <p class="text">Drive into the <strong>blue beacons</strong> to start missions: checkpoint sprints, orb hunts and shady deliveries. Earn <strong>credits</strong>, chase achievements and find the <strong>Havoc Compound</strong> south of downtown.</p>
+                                <p class="text">Watch out for the citizens. Or don't — they're surprisingly quick on their feet.</p>
                             </div>
                         </div>
 
@@ -280,6 +285,39 @@
                                                 <button class="js-reset button is-small has-tooltip">
                                                     <div class="tooltip">Resets every object</div>
                                                     Reset
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Citizens
+                                            </td>
+                                            <td>
+                                                <button class="js-citizens-toggle button is-small has-tooltip">
+                                                    <div class="tooltip">Toggles the pedestrians</div>
+                                                    <span>On</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Color theme
+                                            </td>
+                                            <td>
+                                                <button class="js-theme-toggle button is-small has-tooltip">
+                                                    <div class="tooltip">Switches between the Neon and Classic looks</div>
+                                                    <span>Neon</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Mission HUD
+                                            </td>
+                                            <td>
+                                                <button class="js-hud-toggle button is-small has-tooltip">
+                                                    <div class="tooltip">Shows or hides the mission HUD</div>
+                                                    <span>On</span>
                                                 </button>
                                             </td>
                                         </tr>
@@ -683,10 +721,10 @@
                             <div class="content-inner">
                                 <div class="title">Behind the scene</div>
                                 <p class="text">
-                                    Thank you for visiting my portfolio!
-                                    <br />If you are curious about the stack and how I built this project, here’s everything you need to know.
+                                    Thanks for playing <strong>Neon Havoc</strong>!
+                                    <br />This game is a heavily remixed build of <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">Bruno Simon's open-source folio-2025</a> (MIT license) — recolored, rebranded and expanded with missions, citizens and a home base.
                                 </p>
-                                
+
                                 <h2 class="title">Three.js</h2>
                                 <p class="text">
                                     <a href="https://threejs.org" target="_blank" rel="noreferrer">Three.js</a> is the library I’m using to render this 3D world.

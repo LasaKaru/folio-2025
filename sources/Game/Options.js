@@ -11,8 +11,82 @@ export class Options
         this.setQuality()
         this.setRespawn()
         this.setReset()
+        this.setCitizens()
+        this.setTheme()
+        this.setMissionHud()
         this.setRenderer()
         this.setServer()
+    }
+
+    setCitizens()
+    {
+        const element = this.element.querySelector('.js-citizens-toggle')
+        const text = element.querySelector('span')
+
+        const update = () =>
+        {
+            const enabled = localStorage.getItem('neonHavoc.citizens') !== 'off'
+            text.textContent = enabled ? 'On' : 'Off'
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            const enabled = localStorage.getItem('neonHavoc.citizens') !== 'off'
+
+            if(this.game.world.citizens)
+                this.game.world.citizens.setEnabled(!enabled)
+            else
+                localStorage.setItem('neonHavoc.citizens', enabled ? 'off' : 'on')
+
+            update()
+        })
+    }
+
+    setTheme()
+    {
+        const element = this.element.querySelector('.js-theme-toggle')
+        const text = element.querySelector('span')
+
+        const update = () =>
+        {
+            text.textContent = this.game.dayCycles.theme === 'classic' ? 'Classic' : 'Neon'
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            this.game.dayCycles.applyTheme(this.game.dayCycles.theme === 'classic' ? 'neon' : 'classic')
+            update()
+        })
+    }
+
+    setMissionHud()
+    {
+        const element = this.element.querySelector('.js-hud-toggle')
+        const text = element.querySelector('span')
+
+        const update = () =>
+        {
+            const visible = localStorage.getItem('neonHavoc.hud') !== 'off'
+            text.textContent = visible ? 'On' : 'Off'
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            const visible = localStorage.getItem('neonHavoc.hud') !== 'off'
+
+            if(this.game.missions)
+                this.game.missions.setHudVisible(!visible)
+            else
+                localStorage.setItem('neonHavoc.hud', visible ? 'off' : 'on')
+
+            update()
+        })
     }
 
     setSound()
