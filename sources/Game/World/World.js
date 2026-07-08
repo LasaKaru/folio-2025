@@ -31,6 +31,7 @@ import { Scenery } from './Scenery.js'
 import { Base } from './Base.js'
 import { Citizens } from './Citizens.js'
 import { Scatter } from './Scatter.js'
+import { BrandSign } from './BrandSign.js'
 
 export class World
 {
@@ -81,6 +82,7 @@ export class World
             this.lanterns = new Lanterns()
             this.scenery = new Scenery()
             this.areas = new Areas()
+            this.brandSign = new BrandSign()
             this.base = new Base()
             this.citizens = new Citizens()
             this.scatter = new Scatter()
