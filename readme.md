@@ -86,7 +86,7 @@ Ideas that would keep pushing this toward a "real" shipped game, roughly grouped
 - A real hosted multiplayer backend (persistent rooms, matchmaking, anti-cheat) — the current relay is a self-hosted reference implementation only
 - Cloud save / accounts, so progress isn't tied to one browser's localStorage
 - Monetization model — cosmetic-only purchases (paints/outfits) fit this game's shape best; avoid pay-to-win on upgrades
-- Platform packaging (Electron/Tauri desktop build, or a store page) if this moves beyond the browser
+- ~~Platform packaging~~ — done, see **Desktop build (Electron)** below. Publishing it to itch.io/Steam still needs your own account/credentials
 
 ## Setup
 
@@ -98,12 +98,34 @@ Download and install [Node.js](https://nodejs.org/en/download/) then run this fo
 # Install dependencies
 npm install --force
 
-# Serve at localhost:1234
+# Serve at localhost:5173
 npm run dev
 
 # Build for production in the dist/ directory
 npm run build
 ```
+
+## Desktop build (Electron)
+
+The game can also run as a standalone desktop app via Electron (`electron/main.cjs`, `electron/preload.cjs`) — same code, no server needed, loads the built `dist/index.html` straight off disk.
+
+```bash
+# Live-reload dev mode (runs Vite + Electron together)
+npm run electron:dev
+
+# Quick unpacked build for testing (dist/ + release/<platform>-unpacked/)
+npm run electron:pack
+
+# Full installer for your current platform (release/)
+npm run electron:build
+
+# Or target a specific platform
+npm run electron:build:win
+npm run electron:build:mac
+npm run electron:build:linux
+```
+
+`electron-builder`'s config lives in the `"build"` key of `package.json` — it produces an NSIS installer on Windows, a `.dmg` on macOS, and an `AppImage` on Linux. The first run of any `electron*` script downloads Electron's platform binary from GitHub releases, so it needs unrestricted internet access (this won't work behind a network policy that blocks `github.com`/`objects.githubusercontent.com`).
 
 ## Game loop
 
