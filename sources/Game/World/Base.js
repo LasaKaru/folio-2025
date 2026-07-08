@@ -3,20 +3,22 @@ import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 
-// The Havoc Compound: the player's home base, south of downtown.
-// A walled yard with corner watchtowers, a helipad, a stunt ramp
-// and neon trim, built from simple physical blocks.
+// A player home base: a walled yard with corner watchtowers, a helipad,
+// a stunt ramp and neon trim, built from simple physical blocks.
+// Parameterized so multiple bases can be spawned around the island (Bases.js).
 export class Base
 {
-    constructor()
+    constructor(config = {})
     {
         this.game = Game.getInstance()
 
-        this.center = { x: 27.9, z: -42.1 }
-        this.size = 40
-        this.wallHeight = 2.4
-        this.wallThickness = 0.6
-        this.gateWidth = 8
+        this.name = config.name ?? 'Havoc Compound'
+        this.respawnName = config.respawnName ?? 'base'
+        this.center = config.center ?? { x: 27.9, z: -42.1 }
+        this.size = config.size ?? 40
+        this.wallHeight = config.wallHeight ?? 2.4
+        this.wallThickness = config.wallThickness ?? 0.6
+        this.gateWidth = config.gateWidth ?? 8
 
         this.setMaterials()
         this.setVisual()
@@ -198,8 +200,8 @@ export class Base
     setRespawn()
     {
         // Register the compound as a respawn point
-        this.game.respawns.items.set('base', {
-            name: 'base',
+        this.game.respawns.items.set(this.respawnName, {
+            name: this.respawnName,
             position: new THREE.Vector3(this.center.x, 4, this.center.z + this.size * 0.5 + 6),
             rotation: Math.PI,
         })

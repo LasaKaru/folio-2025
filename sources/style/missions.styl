@@ -52,6 +52,25 @@
             &.is-low
                 background linear-gradient(90deg, #ff4a6b, #ff2ea0)
 
+    .vehicle-health
+        margin-top 4px
+        width 190px
+        height 5px
+        border-radius 3px
+        background alpha(#ffffff, 0.12)
+        overflow hidden
+
+        .fill
+            width 100%
+            height 100%
+            border-radius 3px
+            background linear-gradient(90deg, #00e5ff, #b56bff)
+            transform-origin 0 50%
+            transition transform 0.2s
+
+            &.is-low
+                background linear-gradient(90deg, #ff4a6b, #ff8c3a)
+
     .story-line
         margin-top 6px
         font-size 0.7rem
@@ -68,6 +87,13 @@
 
         &.is-hidden
             opacity 0
+
+    .daily-challenge
+        margin-top 6px
+        font-size 0.65rem
+        font-weight 700
+        color #ffd23f
+        opacity 0.85
 
     .mission-panel
         margin-top 10px

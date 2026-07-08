@@ -324,4 +324,38 @@ export default
         'This one can’t be achieved.',
         1
     ],
+    [
+        'eggHunter',
+        'Egg hunter',
+        'Find all <strong>6</strong> hidden eggs scattered around the island.',
+        6,
+        true // Unique
+    ],
+    [
+        'secretVehicle',
+        'Behind the falls',
+        'Discover the secret paint job hidden behind the waterfall.',
+        1,
+        true // Unique
+    ],
+    [
+        'bossRush',
+        'Boss rush',
+        'Clear every story boss back-to-back in Boss Rush mode.',
+        1,
+        true // Unique
+    ],
+    [
+        'dailyChallenge',
+        'Creature of habit',
+        'Complete <strong>7</strong> daily challenges.',
+        7
+    ],
+    [
+        'victory',
+        'Circuit City champion',
+        'Beat the final boss and claim victory.',
+        1,
+        true // Unique
+    ],
 ]

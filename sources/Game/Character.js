@@ -199,6 +199,7 @@ export class Character
         this.hud = {}
         this.hud.healthFill = this.game.domElement.querySelector('.js-health-fill')
         this.hud.hint = this.game.domElement.querySelector('.js-foot-hint')
+        this.hud.driveHint = this.game.domElement.querySelector('.js-drive-hint')
         this.hud.damageFlash = this.game.domElement.querySelector('.js-damage-flash')
         this.hud.weaponName = this.game.domElement.querySelector('.js-weapon-name')
         this.updateHealthHud()
@@ -318,6 +319,9 @@ export class Character
         if(this.hud.hint)
             this.hud.hint.classList.remove('is-hidden')
 
+        if(this.hud.driveHint)
+            this.hud.driveHint.classList.add('is-hidden')
+
         // Achievement
         this.game.achievements.setProgress('onFoot', 1)
     }
@@ -337,6 +341,9 @@ export class Character
 
         if(this.hud.hint)
             this.hud.hint.classList.add('is-hidden')
+
+        if(this.hud.driveHint)
+            this.hud.driveHint.classList.remove('is-hidden')
 
         // Leave first person cleanly when getting back behind the wheel
         if(this.cameraMode === Character.CAMERA_FIRST_PERSON && document.pointerLockElement)

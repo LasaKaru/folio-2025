@@ -53,6 +53,52 @@
         max-height 80vh
         overflow-y auto
 
+.boss-rush-trigger
+    display none
+    position absolute
+    right 0
+    top 174px
+    width 44px
+    height 44px
+    z-index 9
+    -webkit-user-select none
+    -moz-user-select none
+    user-select none
+
+    html.is-started &
+        display block
+
+    html.input-filter-menu &
+    html.input-filter-cinematic &
+    html.input-filter-intro &
+        pointer-events none
+
+    --hover-translate 4px
+
+    html:not(.is-mode-touch) &:hover
+        .button-inner
+            transform translateX(-4px)
+
+    .button-inner
+        display flex
+        align-items center
+        justify-content center
+        position absolute
+        top 0
+        left 0
+        width calc(100% + var(--hover-translate))
+        height 100%
+        font-size 20px
+        background radial-gradient(ellipse at top right, #ffd23f, #7a4b00)
+        transition transform 0.15s 0.15s
+
+        html.input-filter-menu &,
+        html.input-filter-modal &,
+        html.input-filter-intro &
+        html.input-filter-cinematic &
+            transform translateX(100%)
+            transition-delay 0
+
 .garage-cash
     margin-bottom 15px
     padding 10px 14px

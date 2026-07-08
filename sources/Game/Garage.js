@@ -316,6 +316,32 @@ export class Garage
         }
         this.hud.content.append(truckSection)
 
+        // Repair
+        const health = this.game.vehicleHealth
+        if(health)
+        {
+            const repairSection = this.section('🛠️ Repair')
+            const damaged = health.current < health.max
+            const repairCost = Math.ceil((health.max - health.current) * 2)
+
+            repairSection.append(this.row(
+                'Patch up the truck',
+                `${Math.round(health.current)}/${health.max} HP`,
+                damaged ? `${repairCost} CR` : 'FULL',
+                damaged ? 'Repair' : 'OK',
+                () =>
+                {
+                    if(!this.canAfford(repairCost))
+                        return false
+                    this.spend(repairCost)
+                    health.repair()
+                    return true
+                },
+                !damaged || !this.canAfford(repairCost)
+            ))
+            this.hud.content.append(repairSection)
+        }
+
         // Weapon upgrades
         const weaponSection = this.section('🔫 Weapon upgrades')
         for(const key in weaponUpgrades)
@@ -378,7 +404,11 @@ export class Garage
         const paintsSection = this.section('🎨 Truck paint')
         for(const key in truckPaints)
         {
-            paintsSection.append(this.cosmeticRow('paint', key, truckPaints[key]))
+            const definition = truckPaints[key]
+            if(definition.secret && !this.state.ownedPaints.includes(key))
+                continue
+
+            paintsSection.append(this.cosmeticRow('paint', key, definition))
         }
         this.hud.content.append(paintsSection)
 

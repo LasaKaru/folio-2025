@@ -1,7 +1,7 @@
 import * as THREE from 'three/webgpu'
 import { Game } from './Game.js'
 
-// Havoc Nights: endless waves of raiders attack the compound.
+// Havoc Nights: endless waves of zombies attack the compound.
 // Step into the beacon on the helipad to start; survive as many
 // waves as you can. Ends when the hero dies, pays out CR based on
 // how far you got, and keeps a local best-wave record.
@@ -108,7 +108,7 @@ export class Survival
         const count = Math.min(3 + this.wave, 14)
         const radius = 12
 
-        this.camp = this.game.enemies.spawnCamp({ center: this.center, count, radius })
+        this.camp = this.game.enemies.spawnCamp({ center: this.center, count, radius, faction: 'zombie' })
 
         // Scale HP with wave number
         const hpMultiplier = 1 + (this.wave - 1) * 0.18

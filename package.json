@@ -1,14 +1,21 @@
 {
   "name": "circuit-city",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "electron/main.cjs",
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
     "build": "vite build --mode production",
     "preview": "vite preview",
     "compress": "node scripts/compress.js static/",
-    "server": "node server/index.js"
+    "server": "node server/index.js",
+    "electron": "electron .",
+    "electron:dev": "concurrently -k \"vite --mode development\" \"wait-on http://localhost:5173 && cross-env ELECTRON_START_URL=http://localhost:5173 electron .\"",
+    "electron:pack": "npm run build && electron-builder --dir",
+    "electron:build": "npm run build && electron-builder",
+    "electron:build:win": "npm run build && electron-builder --win",
+    "electron:build:mac": "npm run build && electron-builder --mac",
+    "electron:build:linux": "npm run build && electron-builder --linux"
   },
   "author": "",
   "license": "MIT",
@@ -43,5 +50,38 @@
     "vite-plugin-top-level-await": "^1.6.0",
     "vite-plugin-wasm": "^3.5.0",
     "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3",
+    "cross-env": "^10.1.0",
+    "electron": "^43.1.0",
+    "electron-builder": "^26.15.3",
+    "wait-on": "^9.0.10"
+  },
+  "build": {
+    "appId": "lk.helao2studio.circuitcity",
+    "productName": "Circuit City",
+    "copyright": "Copyright © HelaO2 Studio",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "static/favicons/favicon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.games"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "static/favicons/web-app-manifest-512x512.png",
+      "category": "Game"
+    }
   }
 }

@@ -62,7 +62,9 @@ export class Map
             { name: 'Shop Strip', position: { x: 92, y: 4, z: 8 }, rotationY: Math.PI * 0.5, offset: { x: 0.02, y: 0 }, isFastTravel: true },
             { name: 'Fishing Village', position: { x: -30, y: 4, z: 42 }, rotationY: 0, offset: { x: 0, y: -0.02 }, isFastTravel: true },
             { name: 'Coastal Homes', position: { x: 48, y: 4, z: 55 }, rotationY: 0, offset: { x: 0, y: -0.02 }, isFastTravel: true },
-            { name: 'Havoc Compound', position: this.game.world.base.center, rotationY: 0, offset: { x: 0, y: 0.03 }, isFastTravel: true },
+            { name: 'Havoc Compound', position: this.game.world.bases.list[0].center, rotationY: 0, offset: { x: 0, y: 0.03 }, isFastTravel: true },
+            { name: 'Northside Garage', position: this.game.world.bases.list[1].center, rotationY: 0, offset: { x: 0, y: 0.03 }, isFastTravel: true },
+            { name: 'Old Port Yard', position: this.game.world.bases.list[2].center, rotationY: 0, offset: { x: 0, y: 0.03 }, isFastTravel: true },
         ]
 
         for(const item of this.locations.items)
@@ -173,8 +175,9 @@ export class Map
             this.blips.mission.push({ item, element })
         }
 
-        // Havoc Compound / Havoc Nights
-        this.blips.compound = createBlip(this.game.world.base.center, 'blip-compound', 'Havoc Compound')
+        // Player bases / Havoc Nights
+        this.blips.bases = this.game.world.bases.list.map((base) => createBlip(base.center, 'blip-compound', base.name))
+        this.blips.compound = this.blips.bases[0]
     }
 
     updateBlips()

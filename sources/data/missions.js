@@ -204,4 +204,42 @@ export default [
         reward: 900,
         points: ring(30, 10, 48, 12)
     },
+    {
+        id: 'northsideCircuit',
+        name: 'Northside Circuit',
+        tagline: 'Loop the new garage before the timer runs dry',
+        type: 'checkpoints',
+        start: { x: -60, z: 100 },
+        timeLimit: 45,
+        reward: 400,
+        points: ring(-60, 85, 22, 6)
+    },
+    {
+        id: 'pondHopper',
+        name: 'Pond Hopper',
+        tagline: 'Sweep the orbs scattered around the island\'s ponds',
+        type: 'collect',
+        start: { x: 8, z: 55 },
+        timeLimit: 70,
+        reward: 500,
+        points: [
+            { x: 8, z: 40 },
+            { x: -60, z: 30 },
+            { x: 55, z: -50 },
+        ]
+    },
+    {
+        id: 'portRunFare',
+        name: 'Port Run',
+        tagline: 'A fare wants dropping off at the old port yard',
+        type: 'taxi',
+        stageTexts: [ 'Pick up the fare near the coastal homes', 'Drop them at the old port yard' ],
+        start: { x: 60, z: 40 },
+        timeLimit: 45,
+        reward: 300,
+        points: [
+            { x: 48, z: 55 },
+            { x: 90, z: 65 },
+        ]
+    },
 ]
