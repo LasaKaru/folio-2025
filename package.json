@@ -1,17 +1,18 @@
 {
-  "name": "bruno-simon-folio-2025",
-  "version": "0.0.0",
+  "name": "neon-havoc",
+  "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
     "build": "vite build --mode production",
     "preview": "vite preview",
-    "compress": "node scripts/compress.js static/"
+    "compress": "node scripts/compress.js static/",
+    "server": "node server/index.js"
   },
   "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
+  "description": "Neon Havoc — an open-world neon driving game with missions, citizens and a home base. Remix of Bruno Simon's folio-2025.",
   "dependencies": {
     "@dimforge/rapier3d": "^0.17.3",
     "@gltf-transform/cli": "^4.1.0",
@@ -40,6 +41,7 @@
     "vite-plugin-node-polyfills": "^0.24.0",
     "vite-plugin-restart": "^0.4.1",
     "vite-plugin-top-level-await": "^1.6.0",
-    "vite-plugin-wasm": "^3.5.0"
+    "vite-plugin-wasm": "^3.5.0",
+    "ws": "^8.21.0"
   }
 }

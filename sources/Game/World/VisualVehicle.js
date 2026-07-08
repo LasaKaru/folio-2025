@@ -7,6 +7,7 @@ import { cameraPosition, color, Fn, min, mix, normalWorld, positionViewDirection
 import { clamp } from 'three/src/math/MathUtils.js'
 import gsap from 'gsap'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
+import { truckPaints } from '../../data/upgrades.js'
 
 export class VisualVehicle
 {
@@ -221,6 +222,15 @@ export class VisualVehicle
             }
         }
 
+        // Garage-purchasable paints (Neon Havoc)
+        for(const key in truckPaints)
+        {
+            const paint = truckPaints[key]
+            this.paints.choices[key] = this.game.materials.createGradient(`garagePaint-${key}`, paint.colorA, paint.colorB)
+        }
+
+        this.paints.equippedOverride = null
+
         this.paints.changeTo = (name = 'red') =>
         {
             const material = this.paints.choices[name]
@@ -236,13 +246,21 @@ export class VisualVehicle
                     wheel.painted.material = material
             }
         }
-        
-        // From achievemnts
+
+        // Garage paint takes priority over achievement rewards once equipped
+        this.paints.equip = (name) =>
+        {
+            this.paints.equippedOverride = name
+            this.paints.changeTo(name)
+        }
+
+        // From achievemnts (unless the player equipped a garage paint)
         this.paints.changeTo(this.game.achievements.rewards.current.name)
 
         this.game.achievements.events.on('rewardActiveChange', (reward) =>
         {
-            this.paints.changeTo(reward.name)
+            if(!this.paints.equippedOverride)
+                this.paints.changeTo(reward.name)
         })
     }
 

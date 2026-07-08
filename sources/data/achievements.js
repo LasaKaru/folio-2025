@@ -61,6 +61,95 @@ export default
         1
     ],
     [
+        'missions',
+        'Rookie of Neon Havoc',
+        'Complete your first <strong>mission</strong>.',
+        1,
+        true // Unique
+    ],
+    [
+        'missions',
+        'Made Man',
+        'Complete <strong>5</strong> different missions.',
+        5,
+        true // Unique
+    ],
+    [
+        'missions',
+        'King of the Island',
+        'Complete every <strong>mission</strong>.',
+        10,
+        true // Unique
+    ],
+    [
+        'cash',
+        'First paycheck',
+        'Earn <strong>1000</strong> credits.',
+        1000
+    ],
+    [
+        'cash',
+        'Neon tycoon',
+        'Earn <strong>5000</strong> credits.',
+        5000
+    ],
+    [
+        'bump',
+        'Excuse me, coming through!',
+        'Startle <strong>5</strong> citizens off their feet.',
+        5
+    ],
+    [
+        'survivalWave',
+        'One more wave',
+        'Reach <strong>wave 5</strong> in Havoc Nights.',
+        5
+    ],
+    [
+        'survivalWave',
+        'Compound defender',
+        'Reach <strong>wave 10</strong> in Havoc Nights.',
+        10
+    ],
+    [
+        'garage',
+        'Gearhead',
+        'Buy your first <strong>Garage</strong> upgrade.',
+        1
+    ],
+    [
+        'onFoot',
+        'Stretching my legs',
+        'Step out of the truck.',
+        1
+    ],
+    [
+        'kills',
+        'Pest control',
+        'Take down <strong>10</strong> havoc raiders.',
+        10
+    ],
+    [
+        'kills',
+        'Raider bane',
+        'Take down <strong>50</strong> havoc raiders.',
+        50
+    ],
+    [
+        'story',
+        'It begins',
+        'Clear the first <strong>story</strong> chapter.',
+        1,
+        true // Unique
+    ],
+    [
+        'story',
+        'King of nothing',
+        'Finish the <strong>Neon Havoc</strong> story.',
+        10,
+        true // Unique
+    ],
+    [
         'sea',
         'Under the sea',
         'Go make friend with the fishes.',

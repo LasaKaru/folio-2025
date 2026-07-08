@@ -26,8 +26,9 @@ export class Map
     init()
     {
         this.initiated = true
-        
+
         this.setLocations()
+        this.setBlips()
         this.setPlayer()
         this.setTexture()
 
@@ -88,6 +89,102 @@ export class Map
         }
     }
     
+    setBlips()
+    {
+        this.blips = { mission: [], story: null, compound: null, players: new Map() }
+
+        const createBlip = (worldPosition, className, label = '') =>
+        {
+            const mapPosition = this.worldToMap(worldPosition)
+
+            const element = document.createElement('div')
+            element.classList.add('blip', className)
+            element.style.left = `${mapPosition.x * 100}%`
+            element.style.top = `${mapPosition.y * 100}%`
+            if(label)
+                element.title = label
+
+            this.element.append(element)
+
+            return element
+        }
+
+        // Mission beacons
+        for(const item of this.game.missions.startMarkers)
+        {
+            const element = createBlip(item.mission.start, 'blip-mission', item.mission.name)
+            this.blips.mission.push({ item, element })
+        }
+
+        // Havoc Compound / Havoc Nights
+        this.blips.compound = createBlip(this.game.world.base.center, 'blip-compound', 'Havoc Compound')
+    }
+
+    updateBlips()
+    {
+        for(const { item, element } of this.blips.mission)
+        {
+            const done = this.game.missions.completed.has(item.mission.id)
+            element.classList.toggle('is-done', done)
+        }
+
+        // Story camp blip: create/move/remove as chapters progress
+        const camp = this.game.story.currentCamp
+
+        if(camp)
+        {
+            if(!this.blips.story)
+            {
+                const mapPosition = this.worldToMap(camp.center)
+                const element = document.createElement('div')
+                element.classList.add('blip', 'blip-story')
+                element.title = 'Story objective'
+                this.element.append(element)
+                this.blips.story = element
+            }
+
+            const mapPosition = this.worldToMap(camp.center)
+            this.blips.story.style.left = `${mapPosition.x * 100}%`
+            this.blips.story.style.top = `${mapPosition.y * 100}%`
+        }
+        else if(this.blips.story)
+        {
+            this.blips.story.remove()
+            this.blips.story = null
+        }
+
+        // Other players
+        const activeUuids = new Set()
+
+        for(const [ uuid, player ] of this.game.multiplayer.players)
+        {
+            activeUuids.add(uuid)
+
+            let element = this.blips.players.get(uuid)
+
+            if(!element)
+            {
+                element = document.createElement('div')
+                element.classList.add('blip', 'blip-player')
+                this.element.append(element)
+                this.blips.players.set(uuid, element)
+            }
+
+            const mapPosition = this.worldToMap(player.mesh.position)
+            element.style.left = `${mapPosition.x * 100}%`
+            element.style.top = `${mapPosition.y * 100}%`
+        }
+
+        for(const [ uuid, element ] of this.blips.players)
+        {
+            if(!activeUuids.has(uuid))
+            {
+                element.remove()
+                this.blips.players.delete(uuid)
+            }
+        }
+    }
+
     setPlayer()
     {
         this.player = {}
@@ -172,6 +269,8 @@ export class Map
     {
         if(!this.modal.isOpen)
             return
+
+        this.updateBlips()
 
         const playerRoundedX = Math.round(this.game.player.position.x)
         const playerRoundedY = Math.round(this.game.player.position.z)

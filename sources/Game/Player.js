@@ -603,24 +603,30 @@ export class Player
         // Position
         this.position.copy(this.game.physicalVehicle.position)
         this.position2 = new THREE.Vector2(this.position.x, this.position.z)
-        
-        // View > Focus point
-        this.game.view.focusPoint.trackedPosition.copy(this.position)
 
-        // View > Speed lines
-        if(this.boosting && this.accelerating && this.game.physicalVehicle.speed > 15)
-            this.game.view.speedLines.strength = 1
-        else
-            this.game.view.speedLines.strength = 0
+        // While on foot, the character drives the view/tracks focus instead
+        const onFoot = this.game.character && this.game.character.active
 
-        this.game.view.speedLines.worldTarget.copy(this.position)
+        if(!onFoot)
+        {
+            // View > Focus point
+            this.game.view.focusPoint.trackedPosition.copy(this.position)
 
-        // Tracks > Focus point
-        this.game.tracks.focusPoint.set(this.position.x, this.position.z)
+            // View > Speed lines
+            if(this.boosting && this.accelerating && this.game.physicalVehicle.speed > 15)
+                this.game.view.speedLines.strength = 1
+            else
+                this.game.view.speedLines.strength = 0
 
-        // Inputs touch joystick
-        this.rotationY = Math.atan2(this.game.physicalVehicle.forward.z, this.game.physicalVehicle.forward.x)
-        this.game.inputs.nipple.setCoordinates(this.position.x, this.position.y, this.position.z, this.rotationY)
+            this.game.view.speedLines.worldTarget.copy(this.position)
+
+            // Tracks > Focus point
+            this.game.tracks.focusPoint.set(this.position.x, this.position.z)
+
+            // Inputs touch joystick
+            this.rotationY = Math.atan2(this.game.physicalVehicle.forward.z, this.game.physicalVehicle.forward.x)
+            this.game.inputs.nipple.setCoordinates(this.position.x, this.position.y, this.position.z, this.rotationY)
+        }
 
         // Sound
         if(this.game.physicalVehicle.wheels.justTouchedCount > 1)

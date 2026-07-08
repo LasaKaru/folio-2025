@@ -1,6 +1,35 @@
-# Folio 2025
+# Neon Havoc
 
-![image info](./static/social/share-image.png)
+An open-world neon driving game: missions, citizens, credits and one very bouncy truck.
+
+Built as a heavily remixed edition of [Bruno Simon's folio-2025](https://github.com/brunosimon/folio-2025) (MIT license) — recolored to a neon night-city vibe and expanded into a full game.
+
+## What's new vs the original
+
+- **Full recolor** — retinted model palette (`scripts/retheme-palette.js`), neon day cycles, terrain, trees, grid and UI
+- **On-foot hero** — press `G` to step out of the truck and explore on foot: walk/sprint/jump, camera-relative controls, health bar with regen, and a "wasted" respawn when the raiders get you
+- **First & third person** — press `C` to switch to first-person (mouse-look on foot, hood cam while driving), press again for the classic camera
+- **Shooter combat** — blaster with `X` or left click (drive-bys included), glowing bolts, hit flashes, kill rewards
+- **Story campaign** — 5 chapters with raider camps across the island (scout post, village raid, shore smugglers, circuit siege and a boss fight). Clear a camp to earn credits and unlock the next chapter; progress is saved
+- **Enemies** — havoc raiders with red visors that guard camps, chase you on sight, melee the hero — or get flattened by the truck
+- **Missions** — 10 missions across the island (checkpoint sprints, orb collections, timed deliveries) with rewards in credits, a mission HUD and dedicated achievements. Drive into a blue beacon to start one
+- **Citizens** — low-poly pedestrians strolling around town; they flee the truck and dive out of the way
+- **The Havoc Compound** — a walled home base south of downtown with watchtowers, a helipad, a stunt ramp and its own respawn point
+- **Bigger world** — a fishing village and hamlet with glowing doors/windows, shore stones, and four groves of neon trees
+- **New options** — citizens on/off, Neon/Classic color theme, mission HUD toggle
+- **Rebranded** — new name, texts, console art and metadata
+
+### Controls (additions)
+
+| Key | Action |
+| --- | --- |
+| `G` | Get out of / into the truck |
+| `C` | First / third person camera |
+| `X` or left click | Shoot |
+| `SPACE` (on foot) | Jump |
+| `SHIFT` (on foot) | Sprint |
+
+> Note: `static/palette.png` was retinted. For compressed builds, regenerate `static/palette.ktx` with `npm run compress` (requires [KTX-Software](https://github.com/KhronosGroup/KTX-Software)).
 
 ## Setup
 

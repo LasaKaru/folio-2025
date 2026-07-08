@@ -1,3 +1,4 @@
+import { Howler } from 'howler'
 import { Game } from './Game.js'
 
 export class Options
@@ -11,8 +12,172 @@ export class Options
         this.setQuality()
         this.setRespawn()
         this.setReset()
+        this.setCitizens()
+        this.setTheme()
+        this.setMissionHud()
+        this.setVolume()
+        this.setSensitivity()
+        this.setDifficulty()
+        this.setFullReset()
         this.setRenderer()
         this.setServer()
+    }
+
+    setVolume()
+    {
+        const element = this.element.querySelector('.js-volume-slider')
+        const saved = parseFloat(localStorage.getItem('neonHavoc.volume') ?? '1')
+
+        element.value = saved
+        Howler.volume(saved)
+
+        element.addEventListener('input', () =>
+        {
+            const value = parseFloat(element.value)
+            Howler.volume(value)
+            localStorage.setItem('neonHavoc.volume', value)
+        })
+    }
+
+    setSensitivity()
+    {
+        const element = this.element.querySelector('.js-sensitivity-slider')
+        const saved = parseFloat(localStorage.getItem('neonHavoc.sensitivity') ?? '1')
+
+        element.value = saved
+
+        element.addEventListener('input', () =>
+        {
+            const value = parseFloat(element.value)
+            localStorage.setItem('neonHavoc.sensitivity', value)
+
+            if(this.game.character)
+                this.game.character.mouseSensitivity = value
+        })
+    }
+
+    setDifficulty()
+    {
+        const element = this.element.querySelector('.js-difficulty-toggle')
+        const text = element.querySelector('span')
+        const order = [ 'easy', 'normal', 'hard' ]
+        const labels = { easy: 'Easy', normal: 'Normal', hard: 'Hard' }
+
+        const update = () =>
+        {
+            const current = this.game.enemies?.difficulty ?? localStorage.getItem('neonHavoc.difficulty') ?? 'normal'
+            text.textContent = labels[current]
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            const current = this.game.enemies?.difficulty ?? 'normal'
+            const next = order[(order.indexOf(current) + 1) % order.length]
+
+            if(this.game.enemies)
+                this.game.enemies.applyDifficulty(next)
+            else
+                localStorage.setItem('neonHavoc.difficulty', next)
+
+            update()
+        })
+    }
+
+    setFullReset()
+    {
+        const element = this.element.querySelector('.js-full-reset')
+
+        element.addEventListener('click', () =>
+        {
+            if(!window.confirm('Wipe all Neon Havoc progress? Credits, garage upgrades, story progress and achievements will be lost. This cannot be undone.'))
+                return
+
+            const keysToRemove = []
+            for(let i = 0; i < localStorage.length; i++)
+            {
+                const key = localStorage.key(i)
+                if(key.startsWith('neonHavoc.') || key === 'achievements' || key === 'achievementsTimeStart' || key === 'achievementsTimeEnd' || key === 'achievementsReward' || key === 'distanceDriven' || key === 'timePlayed')
+                    keysToRemove.push(key)
+            }
+
+            for(const key of keysToRemove)
+                localStorage.removeItem(key)
+
+            window.location.reload()
+        })
+    }
+
+    setCitizens()
+    {
+        const element = this.element.querySelector('.js-citizens-toggle')
+        const text = element.querySelector('span')
+
+        const update = () =>
+        {
+            const enabled = localStorage.getItem('neonHavoc.citizens') !== 'off'
+            text.textContent = enabled ? 'On' : 'Off'
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            const enabled = localStorage.getItem('neonHavoc.citizens') !== 'off'
+
+            if(this.game.world.citizens)
+                this.game.world.citizens.setEnabled(!enabled)
+            else
+                localStorage.setItem('neonHavoc.citizens', enabled ? 'off' : 'on')
+
+            update()
+        })
+    }
+
+    setTheme()
+    {
+        const element = this.element.querySelector('.js-theme-toggle')
+        const text = element.querySelector('span')
+
+        const update = () =>
+        {
+            text.textContent = this.game.dayCycles.theme === 'classic' ? 'Classic' : 'Neon'
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            this.game.dayCycles.applyTheme(this.game.dayCycles.theme === 'classic' ? 'neon' : 'classic')
+            update()
+        })
+    }
+
+    setMissionHud()
+    {
+        const element = this.element.querySelector('.js-hud-toggle')
+        const text = element.querySelector('span')
+
+        const update = () =>
+        {
+            const visible = localStorage.getItem('neonHavoc.hud') !== 'off'
+            text.textContent = visible ? 'On' : 'Off'
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            const visible = localStorage.getItem('neonHavoc.hud') !== 'off'
+
+            if(this.game.missions)
+                this.game.missions.setHudVisible(!visible)
+            else
+                localStorage.setItem('neonHavoc.hud', visible ? 'off' : 'on')
+
+            update()
+        })
     }
 
     setSound()

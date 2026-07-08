@@ -49,9 +49,11 @@ export class Zones
 
     update()
     {
+        const onFoot = this.game.character && this.game.character.active
+
         for(const zone of this.items)
         {
-            let playerPosition = this.game.player.position
+            let playerPosition = onFoot ? this.game.character.position : this.game.player.position
             let zonePosition = zone.position
 
             if(zone.type === 'cylinder')
