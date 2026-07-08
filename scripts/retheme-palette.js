@@ -1,6 +1,6 @@
 /**
  * Retints the shared model palette (static/palette.png) toward the
- * "Neon Havoc" look: hue rotated toward pinks/purples, saturation boosted.
+ * "Circuit City" look: hue rotated toward pinks/purples, saturation boosted.
  *
  * Usage: node scripts/retheme-palette.js [input] [output]
  * Note: after running this, run `npm run compress` (requires toktx) to

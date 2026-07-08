@@ -21,7 +21,7 @@ export class Survival
         this.kills = 0
         this.camp = null
 
-        this.best = parseInt(localStorage.getItem('neonHavoc.survivalBest') ?? '0') || 0
+        this.best = parseInt(localStorage.getItem('circuitCity.survivalBest') ?? '0') || 0
 
         this.setMaterials()
         this.setBeacon()
@@ -181,7 +181,7 @@ export class Survival
         if(reachedWave > this.best)
         {
             this.best = reachedWave
-            localStorage.setItem('neonHavoc.survivalBest', this.best)
+            localStorage.setItem('circuitCity.survivalBest', this.best)
         }
 
         if(this.game.achievements.groups.get('survivalWave') && reachedWave > this.game.achievements.groups.get('survivalWave').progress)

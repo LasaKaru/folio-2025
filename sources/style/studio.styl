@@ -85,3 +85,47 @@
             height 12px
             border-radius 50%
             flex-shrink 0
+
+.social-links
+    display flex
+    flex-wrap wrap
+    gap 10px
+    margin 14px 0 20px
+
+    .social-link
+        display inline-flex
+        align-items center
+        gap 6px
+        padding 8px 14px
+        border-radius 20px
+        background alpha(#ffffff, 0.06)
+        border 1px solid alpha(#00e5ff, 0.3)
+        font-weight 700
+        font-size 0.85rem
+        text-decoration none
+        color #ffffff
+        transition background 0.2s ease, transform 0.2s ease, border-color 0.2s ease
+        cursor pointer
+
+        html:not(.is-mode-touch) &:hover
+            background alpha(#00e5ff, 0.16)
+            border-color #00e5ff
+            transform translateY(-2px)
+
+    .social-link--donate
+        background linear-gradient(135deg, alpha(#ff2ea0, 0.25), alpha(#ffd23f, 0.2))
+        border-color #ffd23f
+
+        html:not(.is-mode-touch) &:hover
+            background linear-gradient(135deg, alpha(#ff2ea0, 0.4), alpha(#ffd23f, 0.35))
+            border-color #ffd23f
+
+    .social-link--soon
+        opacity 0.45
+        border-color alpha(#ffffff, 0.2)
+        cursor default
+
+        html:not(.is-mode-touch) &:hover
+            background alpha(#ffffff, 0.06)
+            border-color alpha(#ffffff, 0.2)
+            transform none

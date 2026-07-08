@@ -16,12 +16,12 @@ const text = `
 ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝   ╚═════╝  ╚═════╝
 
 ╔═ Intro ═══════════════╗
-║ Welcome to Neon Havoc, you sneaky developer!
+║ Welcome to Circuit City, you sneaky developer!
 ║ An open-world neon driving game: missions, citizens, credits and one very bouncy truck.
 ╚═══════════════════════╝
 
 ╔═ Credits ═════════════╗
-║ Neon Havoc is a remix of Bruno Simon's open-source folio-2025 (MIT license).
+║ Circuit City is a remix of Bruno Simon's open-source folio-2025 (MIT license).
 ║ Original ⇒ https://github.com/brunosimon/folio-2025
 ╚═══════════════════════╝
 

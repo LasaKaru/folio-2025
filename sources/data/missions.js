@@ -1,4 +1,4 @@
-// Neon Havoc missions
+// Circuit City missions
 // Coordinates are world positions (x, z), y is optional (defaults to ground level)
 // Types:
 // - "checkpoints": drive through every gate in order

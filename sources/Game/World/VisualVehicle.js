@@ -222,7 +222,7 @@ export class VisualVehicle
             }
         }
 
-        // Garage-purchasable paints (Neon Havoc)
+        // Garage-purchasable paints (Circuit City)
         for(const key in truckPaints)
         {
             const paint = truckPaints[key]

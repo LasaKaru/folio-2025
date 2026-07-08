@@ -1,3 +1,5 @@
+import * as THREE from 'three/webgpu'
+import gsap from 'gsap'
 import { clamp } from 'three/src/math/MathUtils.js'
 import { Game } from './Game.js'
 
@@ -54,12 +56,19 @@ export class Map
             { name: 'Projects', respawnName: 'projects', offset: { x: 0, y: -0.02 } },
             { name: 'Social', respawnName: 'social', offset: { x: -0.01, y: -0.04 } },
             { name: 'Time Machine', respawnName: 'timeMachine', offset: { x: 0, y: 0 } },
+
+            // Circuit City fast travel — the new scatter districts
+            { name: 'Downtown', position: { x: -72, y: 4, z: 58 }, rotationY: 0, offset: { x: 0, y: -0.02 }, isFastTravel: true },
+            { name: 'Shop Strip', position: { x: 92, y: 4, z: 8 }, rotationY: Math.PI * 0.5, offset: { x: 0.02, y: 0 }, isFastTravel: true },
+            { name: 'Fishing Village', position: { x: -30, y: 4, z: 42 }, rotationY: 0, offset: { x: 0, y: -0.02 }, isFastTravel: true },
+            { name: 'Coastal Homes', position: { x: 48, y: 4, z: 55 }, rotationY: 0, offset: { x: 0, y: -0.02 }, isFastTravel: true },
+            { name: 'Havoc Compound', position: this.game.world.base.center, rotationY: 0, offset: { x: 0, y: 0.03 }, isFastTravel: true },
         ]
 
         for(const item of this.locations.items)
         {
-            const respawn = this.game.respawns.getByName(item.respawnName)
-            const mapPosition = this.worldToMap(respawn.position)
+            const respawnPosition = item.isFastTravel ? item.position : this.game.respawns.getByName(item.respawnName).position
+            const mapPosition = this.worldToMap(respawnPosition)
 
             // HTML
             const html = /* html */`
@@ -71,22 +80,70 @@ export class Map
 
             const element = document.createElement('div')
             element.classList.add('location')
+            if(item.isFastTravel)
+                element.classList.add('is-fast-travel')
             element.innerHTML = html
             element.style.left = `${(mapPosition.x + item.offset.x)* 100}%`
             element.style.top = `${(mapPosition.y + item.offset.y)* 100}%`
             element.style.zIndex = Math.round(mapPosition.y * 1000)
-            
+
             this.element.append(element)
 
             element.addEventListener('click', () =>
             {
-                this.game.player.respawn(item.respawnName, () =>
-                {
-                    this.game.view.focusPoint.isTracking = true
-                })
                 this.game.modals.close()
+
+                if(item.isFastTravel)
+                    this.fastTravelTo(item.position, item.rotationY ?? 0)
+                else
+                {
+                    this.game.player.respawn(item.respawnName, () =>
+                    {
+                        this.game.view.focusPoint.isTracking = true
+                    })
+                }
             })
         }
+    }
+
+    // Fast travel: fade to the overlay, teleport out of view, hold a cinematic
+    // establishing shot of the destination, then fade the overlay back out and
+    // hand the camera back to normal driving/on-foot control.
+    fastTravelTo(position, rotationY = 0)
+    {
+        this.game.overlay.show(() =>
+        {
+            if(this.game.character?.active)
+            {
+                this.game.character.body.setTranslation({ x: position.x, y: position.y ?? 4, z: position.z }, true)
+                this.game.character.body.setLinvel({ x: 0, y: 0, z: 0 }, true)
+            }
+            else
+            {
+                this.game.physicalVehicle.moveTo({ x: position.x, y: position.y ?? 4, z: position.z }, rotationY)
+            }
+
+            this.game.view.focusPoint.isTracking = false
+            this.game.view.focusPoint.trackedPosition.set(position.x, 0, position.z)
+            this.game.view.focusPoint.position.copy(this.game.view.focusPoint.trackedPosition)
+            this.game.view.focusPoint.smoothedPosition.copy(this.game.view.focusPoint.trackedPosition)
+
+            const cameraPosition = new THREE.Vector3(
+                position.x + Math.sin(rotationY + 0.7) * 18,
+                (position.y ?? 4) + 11,
+                position.z + Math.cos(rotationY + 0.7) * 18
+            )
+            const cameraTarget = new THREE.Vector3(position.x, position.y ?? 4, position.z)
+            this.game.view.cinematic.start(cameraPosition, cameraTarget)
+
+            this.game.overlay.hide()
+
+            gsap.delayedCall(2.4, () =>
+            {
+                this.game.view.cinematic.end()
+                this.game.view.focusPoint.isTracking = true
+            })
+        })
     }
     
     setBlips()

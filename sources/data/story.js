@@ -1,4 +1,4 @@
-// The Neon Havoc story campaign.
+// The Circuit City story campaign.
 // Each chapter spawns a raider camp; clear it to unlock the next one.
 
 export default [

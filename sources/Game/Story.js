@@ -10,7 +10,7 @@ export class Story
     {
         this.game = Game.getInstance()
 
-        const saved = parseInt(localStorage.getItem('neonHavoc.chapter') ?? '0')
+        const saved = parseInt(localStorage.getItem('circuitCity.chapter') ?? '0')
         this.chapterIndex = Number.isNaN(saved) ? 0 : Math.min(saved, storyData.length)
         this.currentCamp = null
 
@@ -90,7 +90,7 @@ export class Story
         this.game.achievements.setProgress('story', chapter.id)
 
         // Persist
-        localStorage.setItem('neonHavoc.chapter', `${this.chapterIndex + 1}`)
+        localStorage.setItem('circuitCity.chapter', `${this.chapterIndex + 1}`)
 
         this.game.notifications.show(
             /* html */`

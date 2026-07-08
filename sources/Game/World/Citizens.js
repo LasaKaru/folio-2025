@@ -16,7 +16,7 @@ export class Citizens
     {
         this.game = Game.getInstance()
 
-        this.enabled = localStorage.getItem('neonHavoc.citizens') !== 'off'
+        this.enabled = localStorage.getItem('circuitCity.citizens') !== 'off'
         this.count = 14
         this.fleeRadius = 8
         this.knockRadius = 1.9
@@ -50,7 +50,7 @@ export class Citizens
     {
         this.enabled = enabled
         this.group.visible = enabled
-        localStorage.setItem('neonHavoc.citizens', enabled ? 'on' : 'off')
+        localStorage.setItem('circuitCity.citizens', enabled ? 'on' : 'off')
     }
 
     setMaterials()

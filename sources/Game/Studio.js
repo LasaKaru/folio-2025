@@ -9,7 +9,7 @@ export class Studio
         if(!this.element)
             return
 
-        const skip = localStorage.getItem('neonHavoc.skipStudioSplash') === 'true'
+        const skip = localStorage.getItem('circuitCity.skipStudioSplash') === 'true'
         const duration = skip ? 0 : 1700
 
         setTimeout(() =>
@@ -24,7 +24,7 @@ export class Studio
             return
 
         this.element.classList.add('is-hidden')
-        localStorage.setItem('neonHavoc.skipStudioSplash', 'true')
+        localStorage.setItem('circuitCity.skipStudioSplash', 'true')
 
         setTimeout(() =>
         {

@@ -26,7 +26,7 @@ export class Options
     setVolume()
     {
         const element = this.element.querySelector('.js-volume-slider')
-        const saved = parseFloat(localStorage.getItem('neonHavoc.volume') ?? '1')
+        const saved = parseFloat(localStorage.getItem('circuitCity.volume') ?? '1')
 
         element.value = saved
         Howler.volume(saved)
@@ -35,21 +35,21 @@ export class Options
         {
             const value = parseFloat(element.value)
             Howler.volume(value)
-            localStorage.setItem('neonHavoc.volume', value)
+            localStorage.setItem('circuitCity.volume', value)
         })
     }
 
     setSensitivity()
     {
         const element = this.element.querySelector('.js-sensitivity-slider')
-        const saved = parseFloat(localStorage.getItem('neonHavoc.sensitivity') ?? '1')
+        const saved = parseFloat(localStorage.getItem('circuitCity.sensitivity') ?? '1')
 
         element.value = saved
 
         element.addEventListener('input', () =>
         {
             const value = parseFloat(element.value)
-            localStorage.setItem('neonHavoc.sensitivity', value)
+            localStorage.setItem('circuitCity.sensitivity', value)
 
             if(this.game.character)
                 this.game.character.mouseSensitivity = value
@@ -65,7 +65,7 @@ export class Options
 
         const update = () =>
         {
-            const current = this.game.enemies?.difficulty ?? localStorage.getItem('neonHavoc.difficulty') ?? 'normal'
+            const current = this.game.enemies?.difficulty ?? localStorage.getItem('circuitCity.difficulty') ?? 'normal'
             text.textContent = labels[current]
         }
 
@@ -79,7 +79,7 @@ export class Options
             if(this.game.enemies)
                 this.game.enemies.applyDifficulty(next)
             else
-                localStorage.setItem('neonHavoc.difficulty', next)
+                localStorage.setItem('circuitCity.difficulty', next)
 
             update()
         })
@@ -91,14 +91,14 @@ export class Options
 
         element.addEventListener('click', () =>
         {
-            if(!window.confirm('Wipe all Neon Havoc progress? Credits, garage upgrades, story progress and achievements will be lost. This cannot be undone.'))
+            if(!window.confirm('Wipe all Circuit City progress? Credits, garage upgrades, story progress and achievements will be lost. This cannot be undone.'))
                 return
 
             const keysToRemove = []
             for(let i = 0; i < localStorage.length; i++)
             {
                 const key = localStorage.key(i)
-                if(key.startsWith('neonHavoc.') || key === 'achievements' || key === 'achievementsTimeStart' || key === 'achievementsTimeEnd' || key === 'achievementsReward' || key === 'distanceDriven' || key === 'timePlayed')
+                if(key.startsWith('circuitCity.') || key === 'achievements' || key === 'achievementsTimeStart' || key === 'achievementsTimeEnd' || key === 'achievementsReward' || key === 'distanceDriven' || key === 'timePlayed')
                     keysToRemove.push(key)
             }
 
@@ -116,7 +116,7 @@ export class Options
 
         const update = () =>
         {
-            const enabled = localStorage.getItem('neonHavoc.citizens') !== 'off'
+            const enabled = localStorage.getItem('circuitCity.citizens') !== 'off'
             text.textContent = enabled ? 'On' : 'Off'
         }
 
@@ -124,12 +124,12 @@ export class Options
 
         element.addEventListener('click', () =>
         {
-            const enabled = localStorage.getItem('neonHavoc.citizens') !== 'off'
+            const enabled = localStorage.getItem('circuitCity.citizens') !== 'off'
 
             if(this.game.world.citizens)
                 this.game.world.citizens.setEnabled(!enabled)
             else
-                localStorage.setItem('neonHavoc.citizens', enabled ? 'off' : 'on')
+                localStorage.setItem('circuitCity.citizens', enabled ? 'off' : 'on')
 
             update()
         })
@@ -161,7 +161,7 @@ export class Options
 
         const update = () =>
         {
-            const visible = localStorage.getItem('neonHavoc.hud') !== 'off'
+            const visible = localStorage.getItem('circuitCity.hud') !== 'off'
             text.textContent = visible ? 'On' : 'Off'
         }
 
@@ -169,12 +169,12 @@ export class Options
 
         element.addEventListener('click', () =>
         {
-            const visible = localStorage.getItem('neonHavoc.hud') !== 'off'
+            const visible = localStorage.getItem('circuitCity.hud') !== 'off'
 
             if(this.game.missions)
                 this.game.missions.setHudVisible(!visible)
             else
-                localStorage.setItem('neonHavoc.hud', visible ? 'off' : 'on')
+                localStorage.setItem('circuitCity.hud', visible ? 'off' : 'on')
 
             update()
         })
