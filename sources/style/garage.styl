@@ -108,6 +108,35 @@
         padding 0 12px
         font-size 0.75rem
 
+.slider
+    -webkit-appearance none
+    appearance none
+    width 140px
+    height 4px
+    border-radius 2px
+    background alpha(#ffffff, 0.2)
+    outline none
+    vertical-align middle
+
+    &::-webkit-slider-thumb
+        -webkit-appearance none
+        appearance none
+        width 18px
+        height 18px
+        border-radius 50%
+        background #00e5ff
+        box-shadow 0 0 6px #00e5ff
+        cursor pointer
+
+    &::-moz-range-thumb
+        width 18px
+        height 18px
+        border none
+        border-radius 50%
+        background #00e5ff
+        box-shadow 0 0 6px #00e5ff
+        cursor pointer
+
 .survival-panel
     margin-top 10px
     padding 12px 16px

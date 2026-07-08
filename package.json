@@ -7,7 +7,8 @@
     "dev": "vite --mode development",
     "build": "vite build --mode production",
     "preview": "vite preview",
-    "compress": "node scripts/compress.js static/"
+    "compress": "node scripts/compress.js static/",
+    "server": "node server/index.js"
   },
   "author": "",
   "license": "MIT",
@@ -40,6 +41,7 @@
     "vite-plugin-node-polyfills": "^0.24.0",
     "vite-plugin-restart": "^0.4.1",
     "vite-plugin-top-level-await": "^1.6.0",
-    "vite-plugin-wasm": "^3.5.0"
+    "vite-plugin-wasm": "^3.5.0",
+    "ws": "^8.21.0"
   }
 }

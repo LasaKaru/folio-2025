@@ -91,7 +91,7 @@ export class Map
     
     setBlips()
     {
-        this.blips = { mission: [], story: null, compound: null }
+        this.blips = { mission: [], story: null, compound: null, players: new Map() }
 
         const createBlip = (worldPosition, className, label = '') =>
         {
@@ -151,6 +151,37 @@ export class Map
         {
             this.blips.story.remove()
             this.blips.story = null
+        }
+
+        // Other players
+        const activeUuids = new Set()
+
+        for(const [ uuid, player ] of this.game.multiplayer.players)
+        {
+            activeUuids.add(uuid)
+
+            let element = this.blips.players.get(uuid)
+
+            if(!element)
+            {
+                element = document.createElement('div')
+                element.classList.add('blip', 'blip-player')
+                this.element.append(element)
+                this.blips.players.set(uuid, element)
+            }
+
+            const mapPosition = this.worldToMap(player.mesh.position)
+            element.style.left = `${mapPosition.x * 100}%`
+            element.style.top = `${mapPosition.y * 100}%`
+        }
+
+        for(const [ uuid, element ] of this.blips.players)
+        {
+            if(!activeUuids.has(uuid))
+            {
+                element.remove()
+                this.blips.players.delete(uuid)
+            }
         }
     }
 

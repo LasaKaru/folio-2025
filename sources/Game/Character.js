@@ -40,6 +40,7 @@ export class Character
         this.health = { current: 100, max: 100, lastHitAt: -100, regenDelay: 6, regenRate: 12, dead: false }
 
         this.fp = { yaw: 0, pitch: -0.1, baseFov: this.game.view.camera.fov, fov: 70 }
+        this.mouseSensitivity = parseFloat(localStorage.getItem('neonHavoc.sensitivity') ?? '1')
 
         // Movement (Garage sprint upgrade adds to sprintSpeed)
         this.walkSpeed = 4.5
@@ -269,8 +270,8 @@ export class Character
             if(document.pointerLockElement !== this.game.canvasElement)
                 return
 
-            this.fp.yaw -= event.movementX * 0.0025
-            this.fp.pitch -= event.movementY * 0.0025
+            this.fp.yaw -= event.movementX * 0.0025 * this.mouseSensitivity
+            this.fp.pitch -= event.movementY * 0.0025 * this.mouseSensitivity
             this.fp.pitch = Math.max(-1.35, Math.min(1.35, this.fp.pitch))
         })
     }

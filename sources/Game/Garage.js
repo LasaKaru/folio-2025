@@ -74,6 +74,18 @@ export class Garage
         {
             this.render()
         })
+
+        this.game.inputs.addActions([
+            { name: 'garage', categories: [ 'wandering' ], keys: [ 'Keyboard.KeyV' ] },
+        ])
+        this.game.inputs.events.on('garage', (action) =>
+        {
+            if(action.active)
+            {
+                this.render()
+                this.game.modals.open('garage')
+            }
+        })
     }
 
     // --- Cost helpers ---

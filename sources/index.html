@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Havoc</title>
+    <title>Neon Havoc | HelaO2 Studio</title>
 
-    <meta name="description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
+    <meta name="description" content="Neon Havoc by HelaO2 Studio — an open-world neon driving game. Missions, mayhem and monster trucks.">
 
     <meta itemprop="name" content="Neon Havoc">
-    <meta itemprop="description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
+    <meta itemprop="description" content="Neon Havoc by HelaO2 Studio — an open-world neon driving game. Missions, mayhem and monster trucks.">
     <meta itemprop="image" content="social/share-image.png?cb=a">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Neon Havoc">
-    <meta name="twitter:description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
+    <meta name="twitter:title" content="Neon Havoc | HelaO2 Studio">
+    <meta name="twitter:description" content="Neon Havoc by HelaO2 Studio — an open-world neon driving game. Missions, mayhem and monster trucks.">
     <meta name="twitter:image" content="social/share-image.png?cb=a">
 
-    <meta property="og:site_name" content="Neon Havoc">
+    <meta property="og:site_name" content="HelaO2 Studio">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Neon Havoc">
-    <meta property="og:description" content="Neon Havoc — an open-world neon driving game. Missions, mayhem and monster trucks.">
+    <meta property="og:title" content="Neon Havoc | HelaO2 Studio">
+    <meta property="og:description" content="Neon Havoc by HelaO2 Studio — an open-world neon driving game. Missions, mayhem and monster trucks.">
     <meta property="og:image" content="social/share-image.png?cb=a">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,6 +49,12 @@
         <div class="font pally" data-font="500 20px Pally-Medium"> </div>
     </div>
     
+    <!-- Studio splash -->
+    <div class="js-studio-splash studio-splash">
+        <img class="logo" src="ui/helao2-logo.svg" alt="HelaO2 Studio" loading="eager">
+        <div class="tagline">presents</div>
+    </div>
+
     <div class="game">
 
         <canvas class="js-canvas"></canvas>
@@ -194,11 +200,29 @@
                         </div>
                     </button>
 
+                    <!-- Multiplayer -->
+                    <button class="js-navigation-item item" data-name="multiplayer">
+                        <div class="button-inner">
+                            <div class="icon-container">
+                                <img src="ui/discord.svg" loading="lazy">
+                            </div>
+                        </div>
+                    </button>
+
                     <!-- Behind the scene -->
                     <button class="js-navigation-item item" data-name="behindTheScene">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/question.svg" loading="lazy">
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Credits -->
+                    <button class="js-navigation-item item" data-name="credits">
+                        <div class="button-inner">
+                            <div class="icon-container">
+                                <img src="ui/helao2-badge.svg" loading="lazy">
                             </div>
                         </div>
                     </button>
@@ -239,10 +263,16 @@
                             <div class="js-preview-message message title"> <span class="js-text text" contenteditable="">Your message here</span><div class="js-flag flag"></div> </div>
                         </div>
 
+                        <!-- Multiplayer -->
+                        <div class="js-preview preview multiplayer-preview is-generated"></div>
+
                         <!-- Behind the scene -->
                         <div class="js-preview preview behindTheScene-preview">
                             <img class="background" src="ui/previews/behindTheScene.webp" loading="lazy" draggable="false">
                         </div>
+
+                        <!-- Credits -->
+                        <div class="js-preview preview credits-preview is-generated"></div>
 
                     </div>
 
@@ -338,6 +368,44 @@
                                                 <button class="js-hud-toggle button is-small has-tooltip">
                                                     <div class="tooltip">Shows or hides the mission HUD</div>
                                                     <span>On</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Volume
+                                            </td>
+                                            <td>
+                                                <input type="range" class="js-volume-slider slider" min="0" max="1" step="0.05" value="1">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Look sensitivity
+                                            </td>
+                                            <td>
+                                                <input type="range" class="js-sensitivity-slider slider" min="0.3" max="2.5" step="0.1" value="1">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Difficulty
+                                            </td>
+                                            <td>
+                                                <button class="js-difficulty-toggle button is-small has-tooltip">
+                                                    <div class="tooltip">Changes raider/enforcer damage and detection range</div>
+                                                    <span>Normal</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Reset all progress
+                                            </td>
+                                            <td>
+                                                <button class="js-full-reset button is-small has-tooltip is-danger">
+                                                    <div class="tooltip">Wipes credits, upgrades, story and achievements — cannot be undone</div>
+                                                    Wipe
                                                 </button>
                                             </td>
                                         </tr>
@@ -465,6 +533,10 @@
                                                         <tr>
                                                             <td><span class="key">Q</span></td>
                                                             <td>Switch weapon</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="key">V</span></td>
+                                                            <td>Open the Garage</td>
                                                         </tr>
                                                         <tr>
                                                             <td><span class="key">SPACE</span> (on foot)</td>
@@ -757,6 +829,32 @@
                         </div>
 
                         <!-- Behind the scene -->
+                        <!-- Multiplayer -->
+                        <div class="js-content content multiplayer-content">
+                            <div class="content-inner">
+                                <div class="title">Multiplayer</div>
+                                <p class="text">Drive the neon streets alongside other players, live.</p>
+
+                                <div class="js-multiplayer-status multiplayer-status">
+                                    <span class="dot"></span>
+                                    <span class="js-multiplayer-status-text label">Checking connection…</span>
+                                </div>
+
+                                <div class="js-multiplayer-players multiplayer-players"></div>
+
+                                <p class="online-element text text-small text-faded">
+                                    Every other connected player appears on the map and the road as a ghost car in their equipped paint.
+                                </p>
+
+                                <p class="offline-element text text-danger">
+                                    <img src="ui/warning.svg" loading="lazy" alt="" class="icon"> No multiplayer server configured for this build.
+                                </p>
+                                <p class="offline-element text text-small text-faded">
+                                    HelaO2 Studio ships a small reference relay server with the project (<code>server/</code>) — point <code>VITE_SERVER_URL</code> at a running instance to light this up.
+                                </p>
+                            </div>
+                        </div>
+
                         <div class="js-content content behindTheScene-content">
                             <div class="content-inner">
                                 <div class="title">Behind the scene</div>
@@ -804,6 +902,34 @@
 
                                 <p class="text text-faded text-align-right">
                                     — Bruno
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Credits -->
+                        <div class="js-content content credits-content">
+                            <div class="content-inner">
+                                <div class="credits-logo">
+                                    <img src="ui/helao2-logo.svg" alt="HelaO2 Studio" loading="lazy">
+                                </div>
+                                <p class="text text-align-center">Neon Havoc is made by <strong>HelaO2 Studio</strong>.</p>
+
+                                <h2 class="title">Built on</h2>
+                                <p class="text">
+                                    Neon Havoc began as <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">Bruno Simon's folio-2025</a> (MIT license) — a stellar open-source three.js portfolio-game. HelaO2 Studio recolored, rebranded and expanded it into a full open-world game: missions, a story campaign, an on-foot hero, a garage economy and more.
+                                </p>
+
+                                <h2 class="title">Thanks</h2>
+                                <ul class="text">
+                                    <li>Bruno Simon — original engine, vehicle and world assets</li>
+                                    <li>mr.doob and the Three.js community</li>
+                                    <li>Sunag — TSL and WebGPU support in Three.js</li>
+                                    <li>Kounine — original soundtrack</li>
+                                    <li>Everyone driving around Neon Havoc</li>
+                                </ul>
+
+                                <p class="text text-faded text-align-center">
+                                    — HelaO2 Studio
                                 </p>
                             </div>
                         </div>

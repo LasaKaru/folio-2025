@@ -54,6 +54,8 @@ import { Enemies } from './Enemies.js'
 import { Story } from './Story.js'
 import { Garage } from './Garage.js'
 import { Survival } from './Survival.js'
+import { Studio } from './Studio.js'
+import { Multiplayer } from './Multiplayer.js'
 
 export class Game
 {
@@ -82,6 +84,9 @@ export class Game
         this.domElement = document.querySelector('.game')
         this.canvasElement = this.domElement.querySelector('.js-canvas')
         document.documentElement.classList.add('is-started')
+
+        // HelaO2 Studio splash (cosmetic only, doesn't block loading)
+        this.studio = new Studio()
 
         // First batch for intro
         this.scene = new THREE.Scene()
@@ -212,6 +217,7 @@ export class Game
         this.story = new Story()
         this.garage = new Garage()
         this.survival = new Survival()
+        this.multiplayer = new Multiplayer()
         this.overlay = new Overlay()
 
         // Pre-render if quality high

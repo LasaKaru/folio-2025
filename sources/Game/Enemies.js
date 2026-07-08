@@ -32,6 +32,12 @@ export class Enemies
         this.shieldDuration = 3
         this.shieldCooldown = 6
 
+        // Difficulty scales damage/detection; base values captured for reapplication
+        this.baseAttackDamage = this.attackDamage
+        this.baseRangedDamage = this.rangedDamage
+        this.baseAggroRadius = this.aggroRadius
+        this.applyDifficulty(localStorage.getItem('neonHavoc.difficulty') ?? 'normal')
+
         this.setSounds()
         this.setMaterials()
         this.setGeometries()
@@ -221,6 +227,23 @@ export class Enemies
             shielded: false,
             shieldTimer: boss ? this.shieldCooldown : 0,
         }
+    }
+
+    applyDifficulty(name)
+    {
+        const presets = {
+            easy: { damage: 0.6, aggro: 0.8 },
+            normal: { damage: 1, aggro: 1 },
+            hard: { damage: 1.6, aggro: 1.3 },
+        }
+        const preset = presets[name] ?? presets.normal
+
+        this.difficulty = presets[name] ? name : 'normal'
+        this.attackDamage = this.baseAttackDamage * preset.damage
+        this.rangedDamage = this.baseRangedDamage * preset.damage
+        this.aggroRadius = this.baseAggroRadius * preset.aggro
+
+        localStorage.setItem('neonHavoc.difficulty', this.difficulty)
     }
 
     getTarget()
