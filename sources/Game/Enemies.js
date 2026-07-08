@@ -88,6 +88,13 @@ export class Enemies
         this.materials.enforcerTotem = this.game.materials.createEmissive('enforcerTotem', '#5ad8ff', 2.2)
         this.materials.rangedBolt = this.game.materials.createEmissive('enforcerBolt', '#5ad8ff', 3)
 
+        // Havoc Nights horde: the zombies (slow, tanky, melee-only)
+        this.materials.zombieBody = create('#2d3b1f')
+        this.materials.zombieBodyBoss = create('#1a2412')
+        this.materials.zombieLimbs = create('#455c2e')
+        this.materials.zombieVisor = this.game.materials.createEmissive('zombieVisor', '#c8ff3a', 2.2)
+        this.materials.zombieTotem = this.game.materials.createEmissive('zombieTotem', '#8bff3a', 2.2)
+
         this.materials.shield = new THREE.MeshBasicMaterial({
             color: 0x5ad8ff,
             transparent: true,
@@ -128,7 +135,9 @@ export class Enemies
         }
 
         // Totem so the camp is visible from far away
-        const totemMaterial = faction === 'enforcer' ? this.materials.enforcerTotem : this.materials.totem
+        const totemMaterial = faction === 'enforcer' ? this.materials.enforcerTotem
+            : faction === 'zombie' ? this.materials.zombieTotem
+            : this.materials.totem
         const totem = new THREE.Mesh(this.geometries.totem, totemMaterial)
         totem.position.set(description.center.x, 2, description.center.z)
         camp.group.add(totem)
@@ -161,12 +170,17 @@ export class Enemies
     {
         const group = new THREE.Group()
         const isEnforcer = faction === 'enforcer'
+        const isZombie = faction === 'zombie'
 
-        const limbsMaterial = isEnforcer ? this.materials.enforcerLimbs : this.materials.limbs
+        const limbsMaterial = isEnforcer ? this.materials.enforcerLimbs
+            : isZombie ? this.materials.zombieLimbs
+            : this.materials.limbs
         const bodyMaterial = boss
-            ? (isEnforcer ? this.materials.enforcerBodyBoss : this.materials.bodyBoss)
-            : (isEnforcer ? this.materials.enforcerBody : this.materials.body)
-        const visorMaterial = isEnforcer ? this.materials.enforcerVisor : this.materials.visor
+            ? (isEnforcer ? this.materials.enforcerBodyBoss : isZombie ? this.materials.zombieBodyBoss : this.materials.bodyBoss)
+            : (isEnforcer ? this.materials.enforcerBody : isZombie ? this.materials.zombieBody : this.materials.body)
+        const visorMaterial = isEnforcer ? this.materials.enforcerVisor
+            : isZombie ? this.materials.zombieVisor
+            : this.materials.visor
 
         const legLeft = new THREE.Mesh(this.geometries.leg, limbsMaterial)
         legLeft.position.set(-0.1, 0.4, 0)
@@ -210,16 +224,21 @@ export class Enemies
         group.position.set(position.x, 0, position.z)
         camp.group.add(group)
 
+        // Zombies are slow and relentless (never return home once they've
+        // spotted you) but tankier than raiders
+        const hp = isZombie ? (boss ? 22 : 5) : (boss ? 16 : 3)
+        const speed = isZombie ? (boss ? 3.4 : 2.1) : (boss ? 4.2 : 3.2)
+
         return {
             group,
             legLeft, legRight, armLeft, armRight, shieldMesh,
             camp,
             boss,
             faction,
-            hp: boss ? 16 : 3,
+            hp,
             state: Enemies.STATE_GUARD,
             home: { x: position.x, z: position.z },
-            speed: boss ? 4.2 : 3.2,
+            speed,
             phase: Math.random() * Math.PI * 2,
             attackCooldown: 0,
             deadTime: 0,

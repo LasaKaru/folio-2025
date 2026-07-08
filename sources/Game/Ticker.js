@@ -17,6 +17,7 @@ export class Ticker
         this.elapsedScaled = 0
         this.waits = []
         this.lastDeltas = []
+        this.paused = false
 
         this.elapsedUniform = uniform(this.elapsed)
         this.deltaUniform = uniform(this.delta)
@@ -28,6 +29,13 @@ export class Ticker
 
     update(elapsed)
     {
+        // Real pause: freeze delta/elapsed and skip the tick entirely so
+        // physics, enemies, timers etc. all stop advancing while the menu
+        // is open (Pause.js). Rendering also hangs off 'tick', so the last
+        // frame just stays on screen behind the menu, like a real pause.
+        if(this.paused)
+            return
+
         const elapsedSeconds = elapsed / 1000
         this.delta = Math.min(elapsedSeconds - this.elapsed, this.maxDelta)
         this.elapsed = elapsedSeconds

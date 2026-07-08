@@ -43,6 +43,7 @@ import { Achievements } from './Achievements.js'
 import { Notifications } from './Notifications.js'
 import { Quality } from './Quality.js'
 import { Menu } from './Menu.js'
+import { Pause } from './Pause.js'
 import { Title } from './Title.js'
 import { PreRenderer } from './PreRenderer.js'
 import { Options } from './Options.js'
@@ -57,9 +58,11 @@ import { VehicleHealth } from './VehicleHealth.js'
 import { Leaderboard } from './Leaderboard.js'
 import { BossMode } from './BossMode.js'
 import { DailyChallenge } from './DailyChallenge.js'
+import { Partner } from './Partner.js'
 import { Survival } from './Survival.js'
 import { Studio } from './Studio.js'
 import { Multiplayer } from './Multiplayer.js'
+import { MiniMap } from './MiniMap.js'
 
 export class Game
 {
@@ -109,6 +112,7 @@ export class Game
         this.viewport = new Viewport(this.domElement)
         this.modals = new Modals()
         this.menu = new Menu()
+        this.pause = new Pause()
         this.rendering = new Rendering()
         await this.rendering.setRenderer()
 
@@ -232,7 +236,9 @@ export class Game
         this.survival = new Survival()
         this.bossMode = new BossMode()
         this.dailyChallenge = new DailyChallenge()
+        this.partner = new Partner()
         this.multiplayer = new Multiplayer()
+        this.miniMap = new MiniMap()
         this.overlay = new Overlay()
 
         // Pre-render if quality high

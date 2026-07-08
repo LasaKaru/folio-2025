@@ -125,5 +125,9 @@ export class Eggs
             null,
             `egg-${item.index}`
         )
+
+        // Finding every egg unlocks the secret Partner
+        if(this.found.size >= this.spots.length)
+            this.game.partner?.unlock()
     }
 }

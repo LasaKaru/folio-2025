@@ -7,20 +7,23 @@ Built as a heavily remixed edition of [Bruno Simon's folio-2025](https://github.
 ## Feature overview
 
 - **Full recolor** — retinted model palette (`scripts/retheme-palette.js`), neon day cycles, terrain, trees, grid and UI
-- **On-foot hero** — press `G` to step out of the truck and explore on foot: walk/sprint/jump, camera-relative controls, a health bar with regen, and a "wasted" respawn when the raiders get you
+- **On-foot hero** — press `G` to step out of the truck and explore on foot: walk/sprint/jump, camera-relative controls, a health bar with regen, and a "wasted" respawn when enemies get you
 - **First & third person** — press `C` to switch to first-person (mouse-look on foot, hood cam while driving), press again for the classic camera
 - **Shooter combat** — blaster (`X` / left click), plus shotgun, rocket launcher and melee once unlocked at the Garage; weapon skins, drive-by shooting, hit flashes, kill rewards
 - **Story campaign** — 10 chapters across two rival factions (Havoc raiders, Enforcers), ending in a final boss. Clear a camp to earn credits and unlock the next chapter; progress is saved. Finishing the campaign triggers a **Victory** screen and records your time on the local leaderboard (Menu → Credits)
 - **Boss Rush** — the 👑 HUD button fights every story boss back-to-back for a big payout
 - **Enemies** — Havoc raiders (melee) and Enforcers (ranged) guard camps, chase on sight, and now also shoot/bash the **truck** if you drive through slowly — watch the vehicle health bar
+- **Zombie horde** — Havoc Nights (below) is fought against a third faction: slow, tanky, relentless zombies with their own sickly-green look
 - **Garage economy** — press `V` to spend credits on truck upgrades, weapon unlocks, cosmetics (paints/outfits/skins), and **truck repairs**
-- **Havoc Nights** — a wave-based horde survival mode based at your compound
+- **Havoc Nights** — a wave-based zombie horde survival mode based at your compound
 - **Missions & side activities** — 13 missions (checkpoints, orb collection, timed deliveries), plus taxi fares, stunt jumps and rampage timers
 - **Daily challenge** — one rotating objective a day (drive/kill/mission-based), shown in the HUD, for a credit bonus
-- **Secrets** — a hidden door tucked behind the map's waterfall unlocks an exclusive truck paint, and 6 collectible eggs are scattered around the island
+- **Secrets** — a hidden door tucked behind the map's waterfall unlocks an exclusive truck paint; 6 collectible eggs are scattered around the island; finding **all 6** secretly unlocks a **Partner** — an AI ally who fights alongside you on foot (`P` to summon/bench once unlocked)
 - **Citizens & wildlife** — pedestrians, wandering deer near the tree groves, and small bird flocks circling a few landmarks
 - **Three home bases** — Havoc Compound, Northside Garage and Old Port Yard, each walled with watchtowers, a helipad and its own respawn point
 - **Bigger world** — villages, a downtown skyline, a shop strip, ponds, a waterfall, shore stones and many tree groves
+- **Minimap** — a always-on radar in the bottom-left corner (missions, bases, story objective, other players), `N` to toggle
+- **Real pause** — pressing `ESC` opens the menu **and freezes the world** (physics, enemies, timers) until you close it, like a proper pause screen
 - **Multiplayer** — a lightweight client (`Multiplayer.js`) renders other connected players as ghost cars, with room codes (Menu → Multiplayer, "Join room") and live text chat; ships with a self-hostable reference relay server (`server/`)
 - **New options** — citizens on/off, Neon/Classic color theme, mission HUD toggle, volume, look sensitivity, difficulty
 - **Rebranded** — HelaO2 Studio branding, splash screen, credits page with Support/Follow links
@@ -38,8 +41,11 @@ Built as a heavily remixed edition of [Bruno Simon's folio-2025](https://github.
 | `Q` | Cycle weapons (once unlocked) |
 | `V` | Open the Garage |
 | `M` | Open the map (fast-travel pins for every district and base) |
+| `N` | Toggle the minimap |
+| `P` | Summon / bench your partner (once unlocked) |
 | `ENTER` | Interact (secret door, easter eggs, NPCs) |
 | `R` | Respawn |
+| `ESC` | Pause and open the menu |
 
 The in-game HUD also shows contextual hints for whichever mode you're in (driving vs. on foot), and the full list is always in **Menu → Controls**.
 
@@ -47,6 +53,7 @@ The in-game HUD also shows contextual hints for whichever mode you're in (drivin
 
 - **Secret vehicle paint** — find the hidden door behind the map's waterfall (far west) and interact with it to unlock "Prototype X", an exclusive Garage paint job
 - **Egg hunt** — 6 eggs are tucked around the island (village dock, downtown, compound gate, shop strip, shore stones, waterfall pool); driving or walking near one collects it automatically. Find all 6 for the "Egg hunter" achievement
+- **Partner mode** — collecting all 6 eggs secretly unlocks an AI partner who follows you on foot and auto-attacks nearby enemies; press `P` to summon or bench them at any time afterward
 
 > Note: `static/palette.png` was retinted. For compressed builds, regenerate `static/palette.ktx` with `npm run compress` (requires [KTX-Software](https://github.com/KhronosGroup/KTX-Software)). Model geometry compression (`VITE_COMPRESSED_MODELS`, on by default) is independent of texture compression (`VITE_COMPRESSED`, off by default) — see `.env.example`.
 
@@ -61,6 +68,25 @@ npm run server
 ```
 
 See `server/README.md` for details and limitations — it's a minimal reference relay (no auth, no persistence), not a production backend.
+
+## Where this could go next
+
+Ideas that would keep pushing this toward a "real" shipped game, roughly grouped by what they need:
+
+**Pure client-code (buildable directly, no new infrastructure)**
+- More partner types/upgrades (unlock a second companion, or let the Garage upgrade the partner's damage/HP)
+- Vehicle variety — 2-3 truck classes with distinct handling, unlocked via credits
+- NPC traffic AI — other vehicles driving the roads, not just pedestrians
+- Photo mode — free camera + filters for screenshots
+- More story chapters / a "New Game+" with scaled-up enemy difficulty
+- Weather-driven missions (races only available at night, in rain, etc.)
+- A proper settings-driven key-rebinding UI (currently controls are fixed)
+
+**Needs a decision or infrastructure (business/hosting-shaped, not just code)**
+- A real hosted multiplayer backend (persistent rooms, matchmaking, anti-cheat) — the current relay is a self-hosted reference implementation only
+- Cloud save / accounts, so progress isn't tied to one browser's localStorage
+- Monetization model — cosmetic-only purchases (paints/outfits) fit this game's shape best; avoid pay-to-win on upgrades
+- Platform packaging (Electron/Tauri desktop build, or a store page) if this moves beyond the browser
 
 ## Setup
 
