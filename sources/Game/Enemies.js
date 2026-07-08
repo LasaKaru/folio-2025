@@ -505,6 +505,12 @@ export class Enemies
                         enemy.attackCooldown = this.attackRate * 1.4
                         this.fireRangedAttack(enemy, target)
                     }
+                    else if(!target.onFoot && targetDistance < this.rangedRadius && enemy.attackCooldown === 0)
+                    {
+                        enemy.attackCooldown = this.attackRate * 1.4
+                        this.fireRangedAttack(enemy, target)
+                        this.game.vehicleHealth?.damage((enemy.boss ? 22 : this.attackDamage) * 0.7)
+                    }
                 }
                 // Melee the hero
                 else if(target.onFoot && targetDistance < this.attackRadius * (enemy.boss ? 2 : 1) && enemy.attackCooldown === 0)
@@ -517,6 +523,16 @@ export class Enemies
 
                     if(this.game.character)
                         this.game.character.damage(enemy.boss ? 22 : this.attackDamage)
+                }
+                // Raiders can also bash a slow-moving truck
+                else if(!target.onFoot && targetDistance < this.attackRadius * (enemy.boss ? 2 : 1) * 1.4 && enemy.attackCooldown === 0)
+                {
+                    enemy.attackCooldown = this.attackRate
+
+                    enemy.armLeft.rotation.x = Math.PI * 0.9
+                    enemy.armRight.rotation.x = Math.PI * 0.9
+
+                    this.game.vehicleHealth?.damage((enemy.boss ? 22 : this.attackDamage) * 0.8)
                 }
             }
         }

@@ -28,11 +28,13 @@ import { Lanterns } from './Lanterns.js'
 import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
-import { Base } from './Base.js'
+import { Bases } from './Bases.js'
 import { Citizens } from './Citizens.js'
 import { Scatter } from './Scatter.js'
 import { BrandSign } from './BrandSign.js'
 import { Waterfall } from './Waterfall.js'
+import { SecretDoor } from './SecretDoor.js'
+import { Eggs } from './Eggs.js'
 import { Birds } from './Birds.js'
 import { Animals } from './Animals.js'
 
@@ -86,10 +88,13 @@ export class World
             this.scenery = new Scenery()
             this.areas = new Areas()
             this.brandSign = new BrandSign()
-            this.base = new Base()
+            this.bases = new Bases()
+            this.base = this.bases.list[0]
             this.citizens = new Citizens()
             this.scatter = new Scatter()
             this.waterfall = new Waterfall()
+            this.secretDoor = new SecretDoor()
+            this.eggs = new Eggs()
             this.birds = new Birds()
             this.animals = new Animals()
         }

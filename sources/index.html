@@ -80,6 +80,7 @@
                 <div class="cash"><span class="js-cash-value">0</span> CR</div>
             </div>
             <div class="health"><div class="js-health-fill fill"></div></div>
+            <div class="vehicle-health"><div class="js-vehicle-health-bar fill"></div></div>
             <div class="js-story-line story-line"></div>
             <div class="js-mission-panel mission-panel is-hidden">
                 <div class="js-mission-name name"></div>
@@ -96,8 +97,17 @@
                     <span class="js-survival-best best"></span>
                 </div>
             </div>
-            <div class="js-foot-hint foot-hint is-hidden">G enter truck · C camera · X shoot · Q weapon · SPACE jump — <span class="js-weapon-name weapon-name">BLASTER</span></div>
+            <div class="js-foot-hint foot-hint is-hidden">G enter truck · C camera · X shoot · Q weapon · SPACE jump · V garage — <span class="js-weapon-name weapon-name">BLASTER</span></div>
+            <div class="js-drive-hint foot-hint">WASD drive · SHIFT boost · SPACE jump · G exit truck · V garage · M map</div>
+            <div class="js-daily-challenge-label daily-challenge"></div>
         </div>
+
+        <!-- Boss Rush trigger -->
+        <button class="js-boss-rush-trigger boss-rush-trigger" title="Boss Rush">
+            <div class="button-inner">
+                <div class="icon-container">👑</div>
+            </div>
+        </button>
 
         <!-- Garage trigger -->
         <button class="js-garage-trigger garage-trigger">
@@ -843,9 +853,21 @@
 
                                 <div class="js-multiplayer-players multiplayer-players"></div>
 
+                                <div class="multiplayer-room">
+                                    <span class="label">Room: <strong class="js-multiplayer-room-current">default</strong></span>
+                                    <input class="js-multiplayer-room-input text-input" type="text" placeholder="room code" maxlength="24">
+                                    <button class="js-multiplayer-room-join button is-small">Join room</button>
+                                </div>
+
                                 <p class="online-element text text-small text-faded">
-                                    Every other connected player appears on the map and the road as a ghost car in their equipped paint.
+                                    Every other connected player appears on the map and the road as a ghost car in their equipped paint. Only players in the same room see each other.
                                 </p>
+
+                                <div class="js-multiplayer-chat-log multiplayer-chat-log"></div>
+                                <div class="multiplayer-chat-input-row">
+                                    <input class="js-multiplayer-chat-input text-input" type="text" placeholder="Say something…" maxlength="200">
+                                    <button class="js-multiplayer-chat-send button is-small">Send</button>
+                                </div>
 
                                 <p class="offline-element text text-danger">
                                     <img src="ui/warning.svg" loading="lazy" alt="" class="icon"> No multiplayer server configured for this build.
@@ -928,6 +950,12 @@
                                     <li>Kounine — original soundtrack</li>
                                     <li>Everyone driving around Circuit City</li>
                                 </ul>
+
+                                <h2 class="title">🏁 Leaderboard</h2>
+                                <p class="text text-small">Fastest full campaign clears, tracked locally on this device.</p>
+                                <ol class="js-leaderboard-list text leaderboard-list">
+                                    <li class="text-faded">No runs yet — beat the final boss to set a time.</li>
+                                </ol>
 
                                 <h2 class="title">Support &amp; follow</h2>
                                 <p class="text">

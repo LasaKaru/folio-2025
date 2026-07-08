@@ -53,6 +53,10 @@ import { Character } from './Character.js'
 import { Enemies } from './Enemies.js'
 import { Story } from './Story.js'
 import { Garage } from './Garage.js'
+import { VehicleHealth } from './VehicleHealth.js'
+import { Leaderboard } from './Leaderboard.js'
+import { BossMode } from './BossMode.js'
+import { DailyChallenge } from './DailyChallenge.js'
 import { Survival } from './Survival.js'
 import { Studio } from './Studio.js'
 import { Multiplayer } from './Multiplayer.js'
@@ -221,9 +225,13 @@ export class Game
         this.missions = new Missions()
         this.character = new Character()
         this.enemies = new Enemies()
+        this.leaderboard = new Leaderboard()
         this.story = new Story()
         this.garage = new Garage()
+        this.vehicleHealth = new VehicleHealth()
         this.survival = new Survival()
+        this.bossMode = new BossMode()
+        this.dailyChallenge = new DailyChallenge()
         this.multiplayer = new Multiplayer()
         this.overlay = new Overlay()
 

@@ -21,9 +21,12 @@ export class Multiplayer
         this.sendTimer = 0
         this.staleTimeout = 8
         this.ghostMaterials = new Map()
+        this.room = localStorage.getItem('circuitCity.room') || 'default'
+        this.chatHistoryLimit = 40
 
         this.setGeometry()
         this.setHud()
+        this.setChat()
         this.setNetworking()
 
         this.game.ticker.events.on('tick', () =>
@@ -42,7 +45,42 @@ export class Multiplayer
         this.hud = {}
         this.hud.status = this.game.domElement.querySelector('.js-multiplayer-status-text')
         this.hud.players = this.game.domElement.querySelector('.js-multiplayer-players')
+        this.hud.roomCurrent = this.game.domElement.querySelector('.js-multiplayer-room-current')
+        this.hud.roomInput = this.game.domElement.querySelector('.js-multiplayer-room-input')
+        this.hud.roomJoin = this.game.domElement.querySelector('.js-multiplayer-room-join')
+
         this.updateStatusHud(this.game.server.connected)
+        this.updateRoomHud()
+
+        if(this.hud.roomJoin && this.hud.roomInput)
+        {
+            this.hud.roomInput.value = this.room
+            this.hud.roomJoin.addEventListener('click', () =>
+            {
+                const value = this.hud.roomInput.value.trim().toLowerCase().slice(0, 24) || 'default'
+                this.setRoom(value)
+            })
+        }
+    }
+
+    updateRoomHud()
+    {
+        if(this.hud.roomCurrent)
+            this.hud.roomCurrent.textContent = this.room
+    }
+
+    setRoom(name)
+    {
+        if(name === this.room)
+            return
+
+        this.clearAll()
+        this.room = name
+        localStorage.setItem('circuitCity.room', name)
+        this.updateRoomHud()
+
+        if(this.game.server.connected)
+            this.sendJoin()
     }
 
     updateStatusHud(connected)
@@ -54,13 +92,56 @@ export class Multiplayer
         {
             const count = this.players.size
             this.hud.status.textContent = count > 0
-                ? `Online — ${count} other player${count > 1 ? 's' : ''} on the island`
-                : 'Online — you\'re the only one here right now'
+                ? `Online in "${this.room}" — ${count} other player${count > 1 ? 's' : ''}`
+                : `Online in "${this.room}" — you're the only one here right now`
         }
         else
         {
             this.hud.status.textContent = 'Offline'
         }
+    }
+
+    setChat()
+    {
+        this.hud.chatLog = this.game.domElement.querySelector('.js-multiplayer-chat-log')
+        this.hud.chatInput = this.game.domElement.querySelector('.js-multiplayer-chat-input')
+        this.hud.chatSend = this.game.domElement.querySelector('.js-multiplayer-chat-send')
+
+        const send = () =>
+        {
+            const text = this.hud.chatInput?.value.trim().slice(0, 200)
+            if(!text)
+                return
+
+            this.hud.chatInput.value = ''
+            this.appendChat('You', text)
+
+            if(this.game.server.connected)
+                this.game.server.send({ type: 'chat', room: this.room, text })
+        }
+
+        this.hud.chatSend?.addEventListener('click', send)
+        this.hud.chatInput?.addEventListener('keydown', (event) =>
+        {
+            if(event.key === 'Enter')
+                send()
+        })
+    }
+
+    appendChat(label, text)
+    {
+        if(!this.hud.chatLog)
+            return
+
+        const line = document.createElement('div')
+        line.classList.add('chat-line')
+        line.innerHTML = `<span class="chat-author">${label}:</span> ${text.replace(/</g, '&lt;')}`
+        this.hud.chatLog.append(line)
+
+        while(this.hud.chatLog.children.length > this.chatHistoryLimit)
+            this.hud.chatLog.firstElementChild.remove()
+
+        this.hud.chatLog.scrollTop = this.hud.chatLog.scrollHeight
     }
 
     setNetworking()
@@ -79,10 +160,15 @@ export class Multiplayer
 
         this.game.server.events.on('message', (data) =>
         {
+            if(data.room && data.room !== this.room)
+                return
+
             if(data.type === 'mpState')
                 this.onPlayerState(data)
             else if(data.type === 'mpLeave')
                 this.removePlayer(data.uuid)
+            else if(data.type === 'chat')
+                this.appendChat(`Racer ${(data.uuid ?? '????').slice(0, 4).toUpperCase()}`, data.text ?? '')
         })
 
         if(this.game.server.connected)
@@ -94,7 +180,7 @@ export class Multiplayer
 
     sendJoin()
     {
-        this.game.server.send({ type: 'mpJoin' })
+        this.game.server.send({ type: 'mpJoin', room: this.room })
     }
 
     getGhostMaterial(paintName)
@@ -217,6 +303,7 @@ export class Multiplayer
 
                 this.game.server.send({
                     type: 'mpState',
+                    room: this.room,
                     x: position.x,
                     y: position.y,
                     z: position.z,

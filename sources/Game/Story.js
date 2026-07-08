@@ -127,6 +127,11 @@ export class Story
             this.chapterIndex += 1
             this.currentCamp = null
             this.updateHud(null)
+
+            gsap.delayedCall(9, () =>
+            {
+                this.game.leaderboard.recordVictory()
+            })
         }
     }
 

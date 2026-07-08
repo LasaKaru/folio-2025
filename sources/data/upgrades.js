@@ -32,6 +32,9 @@ export const truckPaints = {
     toxicGreen:  { name: 'Toxic Green', cost: 450, colorA: '#54ff9f', colorB: '#0a5c34' },
     gold:        { name: 'Havoc Gold', cost: 900, colorA: '#ffd23f', colorB: '#8a5a00' },
     chrome:      { name: 'Chrome', cost: 1200, colorA: '#f2f2f2', colorB: '#555566' },
+    // Hidden until found behind the secret door (World/SecretDoor.js) --
+    // not shown in the shop list until owned.
+    prototypeX:  { name: 'Prototype X', cost: 0, colorA: '#ffffff', colorB: '#00e5ff', secret: true },
 }
 
 export const heroOutfits = {
