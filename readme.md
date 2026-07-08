@@ -1,4 +1,4 @@
-# Neon Havoc
+# Circuit City
 
 An open-world neon driving game: missions, citizens, credits and one very bouncy truck.
 

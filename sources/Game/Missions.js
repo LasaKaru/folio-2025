@@ -31,11 +31,11 @@ export class Missions
 
     setSave()
     {
-        const cash = localStorage.getItem('neonHavoc.cash')
+        const cash = localStorage.getItem('circuitCity.cash')
         this.cash = cash ? parseInt(cash) : 0
 
         let completed = []
-        try { completed = JSON.parse(localStorage.getItem('neonHavoc.completed')) ?? [] }
+        try { completed = JSON.parse(localStorage.getItem('circuitCity.completed')) ?? [] }
         catch { completed = [] }
         this.completed = new Set(completed)
 
@@ -49,8 +49,8 @@ export class Missions
 
     save()
     {
-        localStorage.setItem('neonHavoc.cash', this.cash)
-        localStorage.setItem('neonHavoc.completed', JSON.stringify([...this.completed]))
+        localStorage.setItem('circuitCity.cash', this.cash)
+        localStorage.setItem('circuitCity.completed', JSON.stringify([...this.completed]))
     }
 
     setSounds()
@@ -138,14 +138,14 @@ export class Missions
         this.updateCashHud()
 
         // Visibility option
-        const visible = localStorage.getItem('neonHavoc.hud') !== 'off'
+        const visible = localStorage.getItem('circuitCity.hud') !== 'off'
         this.setHudVisible(visible)
     }
 
     setHudVisible(visible)
     {
         this.hudVisible = visible
-        localStorage.setItem('neonHavoc.hud', visible ? 'on' : 'off')
+        localStorage.setItem('circuitCity.hud', visible ? 'on' : 'off')
         this.hud.element.classList.toggle('is-hidden', !visible)
     }
 

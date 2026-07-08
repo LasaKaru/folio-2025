@@ -36,7 +36,7 @@ export class Enemies
         this.baseAttackDamage = this.attackDamage
         this.baseRangedDamage = this.rangedDamage
         this.baseAggroRadius = this.aggroRadius
-        this.applyDifficulty(localStorage.getItem('neonHavoc.difficulty') ?? 'normal')
+        this.applyDifficulty(localStorage.getItem('circuitCity.difficulty') ?? 'normal')
 
         this.setSounds()
         this.setMaterials()
@@ -243,7 +243,7 @@ export class Enemies
         this.rangedDamage = this.baseRangedDamage * preset.damage
         this.aggroRadius = this.baseAggroRadius * preset.aggro
 
-        localStorage.setItem('neonHavoc.difficulty', this.difficulty)
+        localStorage.setItem('circuitCity.difficulty', this.difficulty)
     }
 
     getTarget()

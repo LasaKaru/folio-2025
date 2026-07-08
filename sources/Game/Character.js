@@ -40,7 +40,7 @@ export class Character
         this.health = { current: 100, max: 100, lastHitAt: -100, regenDelay: 6, regenRate: 12, dead: false }
 
         this.fp = { yaw: 0, pitch: -0.1, baseFov: this.game.view.camera.fov, fov: 70 }
-        this.mouseSensitivity = parseFloat(localStorage.getItem('neonHavoc.sensitivity') ?? '1')
+        this.mouseSensitivity = parseFloat(localStorage.getItem('circuitCity.sensitivity') ?? '1')
 
         // Movement (Garage sprint upgrade adds to sprintSpeed)
         this.walkSpeed = 4.5

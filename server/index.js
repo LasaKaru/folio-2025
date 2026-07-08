@@ -1,4 +1,4 @@
-// Neon Havoc — reference multiplayer relay
+// Circuit City — reference multiplayer relay
 //
 // A minimal WebSocket broadcast relay for the client's multiplayer feature
 // (sources/Game/Multiplayer.js). It does not understand or persist game
@@ -61,4 +61,4 @@ wss.on('connection', (ws) =>
     })
 })
 
-console.log(`Neon Havoc relay listening on ws://localhost:${port}`)
+console.log(`Circuit City relay listening on ws://localhost:${port}`)

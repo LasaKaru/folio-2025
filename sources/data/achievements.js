@@ -62,7 +62,7 @@ export default
     ],
     [
         'missions',
-        'Rookie of Neon Havoc',
+        'Rookie of Circuit City',
         'Complete your first <strong>mission</strong>.',
         1,
         true // Unique
@@ -145,7 +145,7 @@ export default
     [
         'story',
         'King of nothing',
-        'Finish the <strong>Neon Havoc</strong> story.',
+        'Finish the <strong>Circuit City</strong> story.',
         10,
         true // Unique
     ],

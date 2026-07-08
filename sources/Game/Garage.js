@@ -35,7 +35,7 @@ export class Garage
     load()
     {
         let saved = {}
-        try { saved = JSON.parse(localStorage.getItem('neonHavoc.garage')) ?? {} }
+        try { saved = JSON.parse(localStorage.getItem('circuitCity.garage')) ?? {} }
         catch { saved = {} }
 
         this.state = {
@@ -54,7 +54,7 @@ export class Garage
 
     save()
     {
-        localStorage.setItem('neonHavoc.garage', JSON.stringify(this.state))
+        localStorage.setItem('circuitCity.garage', JSON.stringify(this.state))
     }
 
     setHud()

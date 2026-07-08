@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu'
 import { Cycles } from './Cycles.js'
 
 // Color themes
-// "neon" is the Neon Havoc look (hot pinks, electric blues, vice sunsets)
+// "neon" is the Circuit City look (hot pinks, electric blues, vice sunsets)
 // "classic" is the original look, kept as an option
 const themes = {
     neon: {
@@ -19,7 +19,7 @@ const themes = {
     }
 }
 
-const defaultTheme = localStorage.getItem('neonHavoc.theme') === 'classic' ? 'classic' : 'neon'
+const defaultTheme = localStorage.getItem('circuitCity.theme') === 'classic' ? 'classic' : 'neon'
 
 // Live presets (mutated in place when the theme changes so the
 // cycle keyframes, which reference these objects, pick it up)
@@ -61,7 +61,7 @@ export class DayCycles extends Cycles
             return
 
         this.theme = themeName
-        localStorage.setItem('neonHavoc.theme', themeName)
+        localStorage.setItem('circuitCity.theme', themeName)
 
         for(const presetKey in theme)
         {

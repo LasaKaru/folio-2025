@@ -1,4 +1,4 @@
-# Neon Havoc — reference multiplayer relay
+# Circuit City — reference multiplayer relay
 
 The game's multiplayer feature (`sources/Game/Multiplayer.js`) talks over the
 same WebSocket connection used for whispers and the circuit leaderboard
