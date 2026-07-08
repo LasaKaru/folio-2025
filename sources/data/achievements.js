@@ -100,6 +100,24 @@ export default
         5
     ],
     [
+        'survivalWave',
+        'One more wave',
+        'Reach <strong>wave 5</strong> in Havoc Nights.',
+        5
+    ],
+    [
+        'survivalWave',
+        'Compound defender',
+        'Reach <strong>wave 10</strong> in Havoc Nights.',
+        10
+    ],
+    [
+        'garage',
+        'Gearhead',
+        'Buy your first <strong>Garage</strong> upgrade.',
+        1
+    ],
+    [
         'onFoot',
         'Stretching my legs',
         'Step out of the truck.',
@@ -128,7 +146,7 @@ export default
         'story',
         'King of nothing',
         'Finish the <strong>Neon Havoc</strong> story.',
-        5,
+        10,
         true // Unique
     ],
     [

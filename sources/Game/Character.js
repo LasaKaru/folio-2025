@@ -1,8 +1,19 @@
 import * as THREE from 'three/webgpu'
-import { color } from 'three/tsl'
+import { color, uniform } from 'three/tsl'
 import { Game } from './Game.js'
 import { Player } from './Player.js'
 import { MeshDefaultMaterial } from './Materials/MeshDefaultMaterial.js'
+import { heroOutfits, weaponSkins } from '../data/upgrades.js'
+
+// Base weapon stats. Garage upgrades scale damage/rate through
+// character.damageMultiplier / character.rateBonus (applied at fire time),
+// so every weapon benefits from the same upgrade tracks.
+const weaponDefinitions = {
+    blaster: { kind: 'projectile', rate: 0.2,  damage: 1, speed: 45, ttl: 1.4,  color: '#7dffea' },
+    shotgun: { kind: 'spread',     rate: 0.6,  damage: 1, speed: 40, ttl: 0.45, pellets: 5, spread: 0.22 },
+    rocket:  { kind: 'rocket',     rate: 1.1,  damage: 3, speed: 30, ttl: 2,    splashRadius: 5.5 },
+    melee:   { kind: 'melee',      rate: 0.5,  damage: 2, range: 2.3 },
+}
 
 // The on-foot hero. Press G near the truck to hop out and explore,
 // C to switch between third and first person, X (or click) to shoot,
@@ -30,7 +41,18 @@ export class Character
 
         this.fp = { yaw: 0, pitch: -0.1, baseFov: this.game.view.camera.fov, fov: 70 }
 
-        this.shooting = { cooldown: 0, rate: 0.2, projectiles: [], speed: 45, ttl: 1.4 }
+        // Movement (Garage sprint upgrade adds to sprintSpeed)
+        this.walkSpeed = 4.5
+        this.sprintSpeed = 8
+
+        // Garage weapon upgrades (damage/rate) scale every weapon uniformly
+        this.damageMultiplier = 1
+        this.rateBonus = 0
+
+        // Weapons: unlocked via Garage, blaster always available
+        this.weapons = { owned: [ 'blaster' ], current: 'blaster', hasTripleShot: false }
+
+        this.shooting = { cooldown: 0, projectiles: [], meleeSwing: 0 }
 
         this.setSounds()
         this.setVisual()
@@ -82,9 +104,19 @@ export class Character
         })
 
         const skin = create('#ffc8a8')
-        const jacket = create('#00e5ff')
         const pants = create('#2b2436')
-        const visor = this.game.materials.createEmissive('heroVisor', '#ff2ea0', 2)
+
+        // Jacket color is a uniform so Garage outfits can recolor it live
+        this.outfit = {}
+        this.outfit.jacketColor = uniform(color(heroOutfits.default.jacket))
+        const jacket = new MeshDefaultMaterial({
+            colorNode: this.outfit.jacketColor,
+            hasCoreShadows: true,
+            hasDropShadows: true,
+        })
+
+        const visor = this.game.materials.createEmissive('heroVisor', heroOutfits.default.visor, 2)
+        this.outfit.visorUniform = visor.userData.colorUniform
 
         const legGeometry = new THREE.BoxGeometry(0.13, 0.4, 0.13)
         legGeometry.translate(0, -0.2, 0)
@@ -129,7 +161,15 @@ export class Character
 
         // Projectile assets
         this.projectileGeometry = new THREE.IcosahedronGeometry(0.14, 1)
-        this.projectileMaterial = this.game.materials.createEmissive('blasterBolt', '#7dffea', 3.5)
+        this.projectileMaterial = this.game.materials.createEmissive('blasterBolt', weaponSkins.default.color, 3.5)
+        this.outfit.weaponSkinUniform = this.projectileMaterial.userData.colorUniform
+
+        this.pelletGeometry = new THREE.IcosahedronGeometry(0.07, 0)
+        this.rocketGeometry = new THREE.CylinderGeometry(0.12, 0.16, 0.6, 8)
+        this.rocketMaterial = this.game.materials.createEmissive('rocketBolt', '#ff6a2a', 3)
+
+        // Melee swing visual: a short glowing arc the bat traces
+        this.meleeMaterial = this.game.materials.createEmissive('meleeSwing', '#ffd23f', 2.5)
     }
 
     setPhysics()
@@ -159,7 +199,9 @@ export class Character
         this.hud.healthFill = this.game.domElement.querySelector('.js-health-fill')
         this.hud.hint = this.game.domElement.querySelector('.js-foot-hint')
         this.hud.damageFlash = this.game.domElement.querySelector('.js-damage-flash')
+        this.hud.weaponName = this.game.domElement.querySelector('.js-weapon-name')
         this.updateHealthHud()
+        this.updateWeaponHud()
     }
 
     updateHealthHud()
@@ -178,7 +220,14 @@ export class Character
             { name: 'vehicleToggle', categories: [ 'wandering' ], keys: [ 'Keyboard.KeyG' ] },
             { name: 'shoot',         categories: [ 'wandering' ], keys: [ 'Keyboard.KeyX' ] },
             { name: 'cameraMode',    categories: [ 'wandering' ], keys: [ 'Keyboard.KeyC' ] },
+            { name: 'weaponSwitch',  categories: [ 'wandering' ], keys: [ 'Keyboard.KeyQ' ] },
         ])
+
+        this.game.inputs.events.on('weaponSwitch', (action) =>
+        {
+            if(action.active)
+                this.switchWeapon()
+        })
 
         this.game.inputs.events.on('vehicleToggle', (action) =>
         {
@@ -331,14 +380,51 @@ export class Character
         this.body.applyImpulse({ x: 0, y: 45, z: 0 }, true)
     }
 
-    shoot()
+    switchWeapon()
     {
-        if(this.shooting.cooldown > 0)
+        if(this.weapons.owned.length < 2)
             return
 
-        this.shooting.cooldown = this.shooting.rate
+        const index = this.weapons.owned.indexOf(this.weapons.current)
+        this.weapons.current = this.weapons.owned[(index + 1) % this.weapons.owned.length]
+        this.updateWeaponHud()
+    }
 
-        // Direction: camera look in first person, facing on foot, truck forward while driving
+    unlockWeapon(name)
+    {
+        if(this.weapons.owned.includes(name))
+            return
+
+        this.weapons.owned.push(name)
+    }
+
+    updateWeaponHud()
+    {
+        if(this.hud.weaponName)
+            this.hud.weaponName.textContent = this.weapons.current.toUpperCase() + (this.weapons.hasTripleShot && this.weapons.current === 'blaster' ? ' ×3' : '')
+    }
+
+    setOutfit(key)
+    {
+        const outfit = heroOutfits[key]
+        if(!outfit)
+            return
+
+        this.outfit.jacketColor.value.set(outfit.jacket)
+        this.outfit.visorUniform.value.set(outfit.visor)
+    }
+
+    setWeaponSkin(key)
+    {
+        const skin = weaponSkins[key]
+        if(!skin)
+            return
+
+        this.outfit.weaponSkinUniform.value.set(skin.color)
+    }
+
+    getAimOrigin(reach)
+    {
         const direction = new THREE.Vector3()
         const origin = new THREE.Vector3()
 
@@ -359,7 +445,7 @@ export class Character
 
             origin.copy(this.position)
             origin.y += 1.3
-            origin.addScaledVector(direction, 0.5)
+            origin.addScaledVector(direction, reach)
         }
         else
         {
@@ -371,18 +457,91 @@ export class Character
             origin.addScaledVector(direction, 2)
         }
 
-        const mesh = new THREE.Mesh(this.projectileGeometry, this.projectileMaterial)
+        return { direction, origin }
+    }
+
+    spawnProjectile(geometry, material, origin, direction, speed, ttl, kind, damage, splashRadius = 0)
+    {
+        const mesh = new THREE.Mesh(geometry, material)
         mesh.position.copy(origin)
         this.game.scene.add(mesh)
 
-        this.shooting.count = (this.shooting.count ?? 0) + 1
         this.shooting.projectiles.push({
             mesh,
-            velocity: direction.multiplyScalar(this.shooting.speed),
-            ttl: this.shooting.ttl,
+            velocity: direction.clone().multiplyScalar(speed),
+            ttl,
+            kind,
+            damage,
+            splashRadius,
         })
+    }
+
+    shoot()
+    {
+        if(this.shooting.cooldown > 0)
+            return
+
+        const weaponKey = this.active ? this.weapons.current : 'blaster' // drive-by is always the blaster
+        const weapon = weaponDefinitions[weaponKey]
+
+        this.shooting.cooldown = Math.max(0.08, weapon.rate - this.rateBonus)
+        this.shooting.count = (this.shooting.count ?? 0) + 1
+
+        const damage = weapon.damage * this.damageMultiplier
+
+        if(weapon.kind === 'melee')
+        {
+            this.shooting.meleeSwing = 0.3
+            const { origin } = this.getAimOrigin(weapon.range * 0.6)
+            this.game.enemies?.tryHit(origin, weapon.range, damage)
+            this.sounds.shoot.play()
+            return
+        }
+
+        if(weapon.kind === 'spread')
+        {
+            const { origin, direction } = this.getAimOrigin(0.5)
+            const baseAngle = Math.atan2(direction.x, direction.z)
+
+            for(let i = 0; i < weapon.pellets; i++)
+            {
+                const angle = baseAngle + (i / (weapon.pellets - 1) - 0.5) * weapon.spread
+                const pelletDirection = new THREE.Vector3(Math.sin(angle), direction.y, Math.cos(angle))
+                this.spawnProjectile(this.pelletGeometry, this.projectileMaterial, origin, pelletDirection, weapon.speed, weapon.ttl, 'hit', damage)
+            }
+        }
+        else if(weapon.kind === 'rocket')
+        {
+            const { origin, direction } = this.getAimOrigin(0.6)
+            this.spawnProjectile(this.rocketGeometry, this.rocketMaterial, origin, direction, weapon.speed, weapon.ttl, 'rocket', damage, weapon.splashRadius)
+        }
+        else
+        {
+            const { origin, direction } = this.getAimOrigin(0.5)
+
+            if(this.active && this.weapons.hasTripleShot && weaponKey === 'blaster')
+            {
+                const baseAngle = Math.atan2(direction.x, direction.z)
+                for(const offset of [ -0.16, 0, 0.16 ])
+                {
+                    const angle = baseAngle + offset
+                    const spreadDirection = new THREE.Vector3(Math.sin(angle), direction.y, Math.cos(angle))
+                    this.spawnProjectile(this.projectileGeometry, this.projectileMaterial, origin, spreadDirection, weapon.speed, weapon.ttl, 'hit', damage)
+                }
+            }
+            else
+            {
+                this.spawnProjectile(this.projectileGeometry, this.projectileMaterial, origin, direction, weapon.speed, weapon.ttl, 'hit', damage)
+            }
+        }
 
         this.sounds.shoot.play()
+    }
+
+    explodeRocket(position, damage, splashRadius)
+    {
+        this.game.enemies?.damageArea(position, splashRadius, damage)
+        this.game.explosions.explode(position, splashRadius, 3, false)
     }
 
     damage(amount)
@@ -409,6 +568,9 @@ export class Character
     die()
     {
         this.health.dead = true
+
+        // End any ongoing Havoc Nights run before the "wasted" respawn
+        this.game.survival?.end()
 
         this.game.notifications.show(
             /* html */`
@@ -487,7 +649,7 @@ export class Character
         {
             const inputAngle = Math.atan2(inputX, inputZ)
             const moveAngle = yaw + inputAngle
-            const speed = this.sprinting ? 8 : 4.5
+            const speed = this.sprinting ? this.sprintSpeed : this.walkSpeed
 
             this.body.setLinvel({
                 x: Math.sin(moveAngle) * speed,
@@ -521,25 +683,49 @@ export class Character
             projectile.ttl -= deltaScaled
 
             let dead = projectile.ttl <= 0
+            let exploded = false
 
-            const travel = this.shooting.speed * deltaScaled
+            const travel = projectile.velocity.length() * deltaScaled
             const steps = Math.max(1, Math.ceil(travel))
 
             for(let step = 0; step < steps && !dead; step++)
             {
                 projectile.mesh.position.addScaledVector(projectile.velocity, deltaScaled / steps)
 
-                if(projectile.mesh.position.y < -0.5)
+                if(projectile.mesh.position.y < (projectile.kind === 'rocket' ? 0.3 : -0.5))
+                {
                     dead = true
-                else if(this.game.enemies && this.game.enemies.tryHit(projectile.mesh.position, 1.1, 1))
+                    exploded = projectile.kind === 'rocket'
+                }
+                else if(projectile.kind === 'rocket')
+                {
+                    if(this.game.enemies?.hasTargetNear(projectile.mesh.position, projectile.splashRadius))
+                    {
+                        dead = true
+                        exploded = true
+                    }
+                }
+                else if(this.game.enemies?.tryHit(projectile.mesh.position, 1.1, projectile.damage))
+                {
                     dead = true
+                }
             }
 
             if(dead)
             {
+                if(exploded)
+                    this.explodeRocket(projectile.mesh.position, projectile.damage, projectile.splashRadius)
+
                 this.game.scene.remove(projectile.mesh)
                 this.shooting.projectiles.splice(i, 1)
             }
+        }
+
+        // Melee swing animation
+        if(this.shooting.meleeSwing > 0)
+        {
+            this.shooting.meleeSwing -= deltaScaled
+            this.armRight.rotation.x = - Math.sin(Math.max(0, this.shooting.meleeSwing) / 0.3 * Math.PI) * 2
         }
 
         if(!this.active)

@@ -260,6 +260,42 @@
                 top -20px
                 left -20px
     
+    .blip
+        --size 14px
+        position absolute
+        width var(--size)
+        height var(--size)
+        margin-top calc(var(--size) / -2)
+        margin-left calc(var(--size) / -2)
+        border-radius 50%
+        pointer-events none
+        box-shadow 0 0 6px 2px currentColor
+
+        &.blip-mission
+            background #00e5ff
+            color #00e5ff
+
+            &.is-done
+                background #555566
+                color transparent
+                box-shadow none
+
+        &.blip-story
+            background #ff2ea0
+            color #ff2ea0
+            animation map-blip-pulse 1s infinite alternate
+
+        &.blip-compound
+            background #ffd23f
+            color #ffd23f
+            --size 18px
+
+    @keyframes map-blip-pulse
+        from
+            opacity 1
+        to
+            opacity 0.4
+
     .location
         --size 40px
         position absolute

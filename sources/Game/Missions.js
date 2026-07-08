@@ -226,7 +226,7 @@ export class Missions
         }
 
         // Spawn objectives
-        if(mission.type === 'checkpoints')
+        if(mission.type === 'checkpoints' || mission.type === 'taxi' || mission.type === 'stunt')
         {
             for(const point of mission.points)
             {
@@ -267,7 +267,7 @@ export class Missions
         // Hud
         this.hud.panel.classList.remove('is-hidden')
         this.hud.name.textContent = mission.name
-        this.hud.objective.textContent = mission.tagline
+        this.hud.objective.textContent = (mission.type === 'taxi' && mission.stageTexts) ? mission.stageTexts[0] : mission.tagline
         this.hud.timer.classList.remove('is-danger')
         this.updateProgressHud()
 
@@ -297,6 +297,8 @@ export class Missions
 
         if(mission.type === 'delivery')
             this.hud.progress.textContent = 'DELIVER'
+        else if(mission.type === 'rampage')
+            this.hud.progress.textContent = `${hits} kills`
         else
             this.hud.progress.textContent = `${hits} / ${total}`
     }
@@ -389,6 +391,18 @@ export class Missions
         this.setStartMarkersVisible(true)
     }
 
+    // Called by Enemies.kill() on every kill, anywhere in the world.
+    // Only matters while a rampage mission is running.
+    notifyKill()
+    {
+        if(this.state !== Missions.STATE_ACTIVE || this.active.mission.type !== 'rampage')
+            return
+
+        this.active.hits++
+        this.addCash(this.active.mission.killBonus ?? 15)
+        this.updateProgressHud()
+    }
+
     getPlayerPosition()
     {
         // On foot, the character is the player
@@ -455,7 +469,12 @@ export class Missions
 
             if(this.active.timeLeft <= 0)
             {
-                this.failMission()
+                // Rampage is a survive-the-clock challenge: running out of time is the win condition
+                if(mission.type === 'rampage')
+                    this.completeMission()
+                else
+                    this.failMission()
+
                 return
             }
 
@@ -467,7 +486,7 @@ export class Missions
             this.hud.timer.classList.toggle('is-danger', timeLeft < 10)
 
             // Animate and test objectives
-            if(mission.type === 'checkpoints')
+            if(mission.type === 'checkpoints' || mission.type === 'taxi')
             {
                 const current = this.active.objectives[this.active.index]
                 const ring = current.group.userData.ring
@@ -484,10 +503,37 @@ export class Missions
                     this.updateProgressHud()
 
                     if(this.active.index >= this.active.objectives.length)
+                    {
                         this.completeMission()
+                    }
                     else
+                    {
                         this.active.objectives[this.active.index].group.visible = true
+
+                        if(mission.type === 'taxi' && mission.stageTexts?.[this.active.index])
+                            this.hud.objective.textContent = mission.stageTexts[this.active.index]
+                    }
                 }
+            }
+            else if(mission.type === 'stunt')
+            {
+                const current = this.active.objectives[this.active.index]
+                const ring = current.group.userData.ring
+                ring.rotation.z = elapsed * 2
+                ring.scale.setScalar(1 + Math.sin(elapsed * 4) * 0.08)
+
+                // Must be airborne to score the stunt (no coasting through on the ground)
+                const airborne = this.game.physicalVehicle.wheels.inContactCount === 0
+
+                if(airborne && this.testHit(current.point, current.point.y ?? 0, this.hitRadius))
+                {
+                    this.active.hits++
+                    this.completeMission()
+                }
+            }
+            else if(mission.type === 'rampage')
+            {
+                // No fixed objectives: kills during the window are counted via notifyKill()
             }
             else if(mission.type === 'collect')
             {

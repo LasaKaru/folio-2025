@@ -52,6 +52,8 @@ import { Missions } from './Missions.js'
 import { Character } from './Character.js'
 import { Enemies } from './Enemies.js'
 import { Story } from './Story.js'
+import { Garage } from './Garage.js'
+import { Survival } from './Survival.js'
 
 export class Game
 {
@@ -208,6 +210,8 @@ export class Game
         this.character = new Character()
         this.enemies = new Enemies()
         this.story = new Story()
+        this.garage = new Garage()
+        this.survival = new Survival()
         this.overlay = new Overlay()
 
         // Pre-render if quality high

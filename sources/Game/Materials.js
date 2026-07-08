@@ -118,6 +118,7 @@ export class Materials
         const material = new THREE.MeshBasicNodeMaterial({ transparent: true })
         material.colorNode = baseColor.div(luminance(baseColor)).mul(intensity)
         material.fog = false
+        material.userData.colorUniform = baseColor
         this.save(_name, material)
   
         if(this.game.debug.active && debugPanel)

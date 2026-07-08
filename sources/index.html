@@ -82,8 +82,22 @@
                     <span class="js-mission-progress progress"></span>
                 </div>
             </div>
-            <div class="js-foot-hint foot-hint is-hidden">G enter truck · C camera · X shoot · SPACE jump</div>
+            <div class="js-survival-panel survival-panel is-hidden">
+                <div class="name">🌙 Havoc Nights</div>
+                <div class="stats">
+                    <span class="js-survival-wave wave">Wave 1</span>
+                    <span class="js-survival-best best"></span>
+                </div>
+            </div>
+            <div class="js-foot-hint foot-hint is-hidden">G enter truck · C camera · X shoot · Q weapon · SPACE jump — <span class="js-weapon-name weapon-name">BLASTER</span></div>
         </div>
+
+        <!-- Garage trigger -->
+        <button class="js-garage-trigger garage-trigger">
+            <div class="button-inner">
+                <div class="icon-container">🔧</div>
+            </div>
+        </button>
 
         <!-- Damage flash -->
         <div class="js-damage-flash damage-flash"></div>
@@ -447,6 +461,10 @@
                                                         <tr>
                                                             <td><span class="key">X</span> or <span class="key">LEFT CLICK</span></td>
                                                             <td>Shoot</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span class="key">Q</span></td>
+                                                            <td>Switch weapon</td>
                                                         </tr>
                                                         <tr>
                                                             <td><span class="key">SPACE</span> (on foot)</td>
@@ -934,6 +952,23 @@
                 <div class="js-map-container map-container">
                     <img class="js-texture texture" loading="lazy">
                     <div class="js-player player"></div>
+                </div>
+            </div>
+
+            <!-- Garage -->
+            <div class="js-modal modal garage" data-name="garage">
+                <div class="container">
+                    <div class="content">
+                        <button class="js-close close">
+                            <img class="icon is-default" src="ui/close.svg" loading="lazy">
+                            <span class="icon is-xbox">A</span>
+                        </button>
+
+                        <div class="title">🔧 The Garage</div>
+                        <p class="text text-small text-faded">Spend credits earned from missions, story chapters and Havoc Nights.</p>
+
+                        <div class="js-garage-content garage-content"></div>
+                    </div>
                 </div>
             </div>
 

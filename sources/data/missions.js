@@ -146,6 +146,55 @@ export default [
         ]
     },
     {
+        id: 'plazaFare',
+        name: 'Plaza Fare',
+        tagline: 'A fare needs a ride across town',
+        type: 'taxi',
+        stageTexts: [ 'Pick up the fare at the plaza', 'Get them to the bowling alley' ],
+        start: { x: 35, z: 20 },
+        timeLimit: 55,
+        reward: 300,
+        points: [
+            { x: 30, z: 15 },
+            { x: 21.3, z: 62.2 },
+        ]
+    },
+    {
+        id: 'harborFare',
+        name: 'Harbor Fare',
+        tagline: 'One more fare, this one wants the toilet block',
+        type: 'taxi',
+        stageTexts: [ 'Pick up the fare downtown', 'Drop them at the latrine' ],
+        start: { x: 60, z: 25 },
+        timeLimit: 60,
+        reward: 350,
+        points: [
+            { x: 48.8, z: -11.5 },
+            { x: 70.9, z: 66 },
+        ]
+    },
+    {
+        id: 'compoundLaunch',
+        name: 'Compound Launch',
+        tagline: 'Send it off the stunt ramp and stick the landing',
+        type: 'stunt',
+        start: { x: 27.9, z: -50 },
+        timeLimit: 30,
+        reward: 350,
+        points: [ { x: 27.9, z: -20, y: 3.5 } ]
+    },
+    {
+        id: 'downtownRampage',
+        name: 'Downtown Rampage',
+        tagline: 'Every raider you drop for the next 30s pays double',
+        type: 'rampage',
+        start: { x: 30, z: 10 },
+        timeLimit: 30,
+        reward: 200,
+        killBonus: 20,
+        points: []
+    },
+    {
         id: 'harborSweep',
         name: 'Harbor Sweep',
         tagline: 'Twelve orbs circle the whole island, sweep them up',
