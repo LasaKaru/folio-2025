@@ -108,10 +108,17 @@ export class Game
         this.rendering = new Rendering()
         await this.rendering.setRenderer()
 
-        const compressed = !!import.meta.env.VITE_COMPRESSED
-        const compressedModelSuffix = compressed ? '-compressed' : ''
-        const compressedTextureFormat = compressed ? 'textureKtx' : 'texture'
-        const compressedTextureExtension = compressed ? 'ktx' : 'png'
+        // Model (Draco geometry) compression is independent from texture (KTX)
+        // compression: the -compressed.glb variants only re-encode geometry and
+        // each model's own embedded textures, so they're safe to use even though
+        // static/palette.ktx and friends haven't been regenerated since the neon
+        // retheme. Defaults to on: it cuts the initial download by ~4x (areas.glb
+        // alone goes from 3.2MB to 628KB).
+        const compressedModels = import.meta.env.VITE_COMPRESSED_MODELS !== 'false'
+        const compressedTextures = !!import.meta.env.VITE_COMPRESSED
+        const compressedModelSuffix = compressedModels ? '-compressed' : ''
+        const compressedTextureFormat = compressedTextures ? 'textureKtx' : 'texture'
+        const compressedTextureExtension = compressedTextures ? 'ktx' : 'png'
 
         const cb = '?cb=1'
         this.resources = await this.resourcesLoader.load([
