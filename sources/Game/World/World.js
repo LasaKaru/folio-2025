@@ -32,6 +32,9 @@ import { Base } from './Base.js'
 import { Citizens } from './Citizens.js'
 import { Scatter } from './Scatter.js'
 import { BrandSign } from './BrandSign.js'
+import { Waterfall } from './Waterfall.js'
+import { Birds } from './Birds.js'
+import { Animals } from './Animals.js'
 
 export class World
 {
@@ -86,6 +89,9 @@ export class World
             this.base = new Base()
             this.citizens = new Citizens()
             this.scatter = new Scatter()
+            this.waterfall = new Waterfall()
+            this.birds = new Birds()
+            this.animals = new Animals()
         }
         else if(step === 2)
         {

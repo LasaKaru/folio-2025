@@ -1,5 +1,5 @@
 import * as THREE from 'three/webgpu'
-import { color } from 'three/tsl'
+import { color, sin } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 
@@ -31,6 +31,7 @@ export class Scatter
         this.setStones()
         this.setTrees()
         this.setGrassTufts()
+        this.setPonds()
 
         this.game.scene.add(this.group)
 
@@ -320,14 +321,8 @@ export class Scatter
     {
         const stoneGeometry = new THREE.DodecahedronGeometry(1, 0)
 
-        for(let i = 0; i < 26; i++)
+        const placeStone = (x, z, size) =>
         {
-            const angle = this.random() * Math.PI * 2
-            const radius = 45 + this.random() * 25
-            const x = Math.cos(angle) * radius + 20
-            const z = Math.sin(angle) * radius + 10
-            const size = 0.5 + this.random() * 1.7
-
             const stone = new THREE.Mesh(stoneGeometry, this.random() > 0.5 ? this.materials.stone : this.materials.stoneDark)
             stone.position.set(x, size * 0.4, z)
             stone.scale.setScalar(size)
@@ -347,6 +342,40 @@ export class Scatter
                 })
             }
         }
+
+        // Main ring of shore stones
+        for(let i = 0; i < 42; i++)
+        {
+            const angle = this.random() * Math.PI * 2
+            const radius = 45 + this.random() * 25
+            const x = Math.cos(angle) * radius + 20
+            const z = Math.sin(angle) * radius + 10
+            const size = 0.5 + this.random() * 1.7
+
+            placeStone(x, z, size)
+        }
+
+        // Extra scattered clusters near the tree groves and outlying districts
+        const clusters = [
+            { x: -20, z: 20, radius: 12, count: 8 },
+            { x: 30, z: 90, radius: 14, count: 8 },
+            { x: -80, z: -40, radius: 16, count: 10 },
+            { x: 66, z: -34, radius: 10, count: 6 },
+        ]
+
+        for(const cluster of clusters)
+        {
+            for(let i = 0; i < cluster.count; i++)
+            {
+                const angle = this.random() * Math.PI * 2
+                const radius = this.random() * cluster.radius
+                const x = cluster.x + Math.cos(angle) * radius
+                const z = cluster.z + Math.sin(angle) * radius
+                const size = 0.4 + this.random() * 1.4
+
+                placeStone(x, z, size)
+            }
+        }
     }
 
     setTrees()
@@ -362,6 +391,9 @@ export class Scatter
             { x: -20, z: 20, radius: 14, count: 10 },
             { x: 30, z: 90, radius: 16, count: 12 },
             { x: -80, z: -40, radius: 18, count: 14 },
+            { x: 12, z: 18, radius: 14, count: 12 },
+            { x: -35, z: 65, radius: 16, count: 14 },
+            { x: 78, z: 30, radius: 14, count: 12 },
         ]
 
         for(const patch of patches)
@@ -451,5 +483,35 @@ export class Scatter
 
         instanced.instanceMatrix.needsUpdate = true
         this.group.add(instanced)
+    }
+
+    setPonds()
+    {
+        const geometry = new THREE.CircleGeometry(1, 32)
+        geometry.rotateX(- Math.PI * 0.5)
+
+        // Cheap shimmer driven by the existing global elapsed-time uniform,
+        // no per-frame JS tick needed.
+        const shimmer = sin(this.game.ticker.elapsedScaledUniform.mul(1.4)).mul(0.08).add(0.92)
+        const pondMaterial = new MeshDefaultMaterial({
+            colorNode: color('#1fb7ff').mul(shimmer),
+            hasCoreShadows: false,
+            hasDropShadows: false,
+        })
+
+        const ponds = [
+            { x: 8, z: 40, radius: 5 },
+            { x: -60, z: 30, radius: 4 },
+            { x: 55, z: -50, radius: 6 },
+        ]
+
+        for(const pond of ponds)
+        {
+            const mesh = new THREE.Mesh(geometry, pondMaterial)
+            mesh.position.set(pond.x, 0.05, pond.z)
+            mesh.scale.setScalar(pond.radius)
+            mesh.receiveShadow = true
+            this.group.add(mesh)
+        }
     }
 }
