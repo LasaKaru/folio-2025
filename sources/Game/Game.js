@@ -54,6 +54,7 @@ import { Character } from './Character.js'
 import { Enemies } from './Enemies.js'
 import { Story } from './Story.js'
 import { Garage } from './Garage.js'
+import { Store } from './Store.js'
 import { VehicleHealth } from './VehicleHealth.js'
 import { Leaderboard } from './Leaderboard.js'
 import { BossMode } from './BossMode.js'
@@ -232,6 +233,7 @@ export class Game
         this.leaderboard = new Leaderboard()
         this.story = new Story()
         this.garage = new Garage()
+        this.store = new Store()
         this.vehicleHealth = new VehicleHealth()
         this.survival = new Survival()
         this.bossMode = new BossMode()

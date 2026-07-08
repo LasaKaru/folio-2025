@@ -19,6 +19,7 @@ Built as a heavily remixed edition of [Bruno Simon's folio-2025](https://github.
 - **Missions & side activities** — 13 missions (checkpoints, orb collection, timed deliveries), plus taxi fares, stunt jumps and rampage timers
 - **Daily challenge** — one rotating objective a day (drive/kill/mission-based), shown in the HUD, for a credit bonus
 - **Secrets** — a hidden door tucked behind the map's waterfall unlocks an exclusive truck paint; 6 collectible eggs are scattered around the island; finding **all 6** secretly unlocks a **Partner** — an AI ally who fights alongside you on foot (`P` to summon/bench once unlocked)
+- **Cosmetic store** — a few paints/outfits are real-money-only, sold cosmetic-only (no stat effect) through a self-hostable Stripe Checkout scaffold (`server/store.js`); everything else stays credit-only
 - **Citizens & wildlife** — pedestrians, wandering deer near the tree groves, and small bird flocks circling a few landmarks
 - **Three home bases** — Havoc Compound, Northside Garage and Old Port Yard, each walled with watchtowers, a helipad and its own respawn point
 - **Bigger world** — villages, a downtown skyline, a shop strip, ponds, a waterfall, shore stones and many tree groves
@@ -67,7 +68,23 @@ npm run server
 # then in .env: VITE_SERVER_URL=ws://localhost:8080
 ```
 
-See `server/README.md` for details and limitations — it's a minimal reference relay (no auth, no persistence), not a production backend.
+See `server/README.md` for details and limitations — it's a minimal reference relay (no auth, no persistence), not a production backend. For what a real hosted backend (persistent rooms, matchmaking) would look like, see `server/ARCHITECTURE.md` — a design doc, not shipped code.
+
+## Cosmetic store (optional)
+
+A few paints/outfits are sold for real money — cosmetic only, same as
+every credit-bought item, no stats attached. Powered by a self-hostable
+Stripe Checkout scaffold:
+
+```bash
+npm install
+STRIPE_SECRET_KEY=sk_test_xxx STRIPE_WEBHOOK_SECRET=whsec_xxx npm run store
+# then in .env: VITE_STORE_URL=http://localhost:8081
+```
+
+Without it configured, premium Garage rows are visible but not
+purchasable — see `server/STORE.md` for full setup (getting Stripe keys,
+webhook forwarding, going live, adding new items).
 
 ## Where this could go next
 
@@ -83,9 +100,9 @@ Ideas that would keep pushing this toward a "real" shipped game, roughly grouped
 - A proper settings-driven key-rebinding UI (currently controls are fixed)
 
 **Needs a decision or infrastructure (business/hosting-shaped, not just code)**
-- A real hosted multiplayer backend (persistent rooms, matchmaking, anti-cheat) — the current relay is a self-hosted reference implementation only
+- ~~A real hosted multiplayer backend~~ — design doc done, see `server/ARCHITECTURE.md` (persistent rooms, matchmaking, scaling notes). Not deployed — needs your own database + hosting to actually run
 - Cloud save / accounts, so progress isn't tied to one browser's localStorage
-- Monetization model — cosmetic-only purchases (paints/outfits) fit this game's shape best; avoid pay-to-win on upgrades
+- ~~Monetization model~~ — cosmetic-only Stripe Checkout scaffold done, see **Cosmetic store** above. Needs your own Stripe account to actually take payments
 - ~~Platform packaging~~ — done, see **Desktop build (Electron)** below. Publishing it to itch.io/Steam still needs your own account/credentials
 
 ## Setup

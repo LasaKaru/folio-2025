@@ -453,6 +453,12 @@ export class Garage
             buttonLabel = 'Equip'
             action = () => this.equipCosmetic(kind, key)
         }
+        else if(definition.premium)
+        {
+            valueLabel = '💎 real money'
+            buttonLabel = `$${(definition.priceCents / 100).toFixed(2)}`
+            action = () => { this.game.store?.checkout(kind, key); return false }
+        }
         else
         {
             valueLabel = ''
@@ -461,6 +467,6 @@ export class Garage
             disabled = !this.canAfford(definition.cost)
         }
 
-        return this.row(definition.name, '', valueLabel, buttonLabel, action ?? (() => false), disabled)
+        return this.row(definition.name, definition.premium ? 'Premium — cosmetic only, no gameplay effect' : '', valueLabel, buttonLabel, action ?? (() => false), disabled)
     }
 }

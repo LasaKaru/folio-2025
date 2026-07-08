@@ -35,6 +35,10 @@ export const truckPaints = {
     // Hidden until found behind the secret door (World/SecretDoor.js) --
     // not shown in the shop list until owned.
     prototypeX:  { name: 'Prototype X', cost: 0, colorA: '#ffffff', colorB: '#00e5ff', secret: true },
+    // Real-money-only paints, sold through server/store.js (Stripe Checkout).
+    // Cosmetic only, like every other paint here -- no stat difference.
+    voidPurple:   { name: 'Void Purple', cost: 0, premium: true, priceCents: 299, colorA: '#7a2eff', colorB: '#100022' },
+    sunsetChrome: { name: 'Sunset Chrome Deluxe', cost: 0, premium: true, priceCents: 499, colorA: '#ff8a3d', colorB: '#3d1a00' },
 }
 
 export const heroOutfits = {
@@ -43,6 +47,8 @@ export const heroOutfits = {
     toxic:    { name: 'Toxic Courier', cost: 350, jacket: '#54ff9f', visor: '#0b1c66' },
     royal:    { name: 'Royal Havoc', cost: 600, jacket: '#b56bff', visor: '#00e5ff' },
     blackout: { name: 'Blackout', cost: 800, jacket: '#1a1a22', visor: '#ff2ea0' },
+    // Real-money-only outfit, sold through server/store.js (Stripe Checkout).
+    neonPhantom: { name: 'Neon Phantom', cost: 0, premium: true, priceCents: 399, jacket: '#00fff7', visor: '#ff00d4' },
 }
 
 export const weaponSkins = {
