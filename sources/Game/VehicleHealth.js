@@ -9,7 +9,8 @@ export class VehicleHealth
     {
         this.game = Game.getInstance()
 
-        this.max = 100
+        this.base = 100
+        this.max = this.base
         this.current = this.max
         this.lastSpeed = 0
         this.crashThreshold = 16
@@ -56,6 +57,16 @@ export class VehicleHealth
     {
         this.current = Math.min(this.max, this.current + amount)
         this.destroyed = false
+        this.updateHud()
+    }
+
+    // Vehicle classes (Garage.js) give tankier trucks more max HP -- keeps
+    // the current/max ratio stable rather than snapping the health bar.
+    setMaxMultiplier(multiplier)
+    {
+        const ratio = this.max > 0 ? this.current / this.max : 1
+        this.max = this.base * multiplier
+        this.current = this.max * ratio
         this.updateHud()
     }
 

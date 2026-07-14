@@ -13,6 +13,7 @@ export class Options
         this.setRespawn()
         this.setReset()
         this.setCitizens()
+        this.setTraffic()
         this.setTheme()
         this.setMissionHud()
         this.setVolume()
@@ -130,6 +131,32 @@ export class Options
                 this.game.world.citizens.setEnabled(!enabled)
             else
                 localStorage.setItem('circuitCity.citizens', enabled ? 'off' : 'on')
+
+            update()
+        })
+    }
+
+    setTraffic()
+    {
+        const element = this.element.querySelector('.js-traffic-toggle')
+        const text = element.querySelector('span')
+
+        const update = () =>
+        {
+            const enabled = localStorage.getItem('circuitCity.traffic') !== 'off'
+            text.textContent = enabled ? 'On' : 'Off'
+        }
+
+        update()
+
+        element.addEventListener('click', () =>
+        {
+            const enabled = localStorage.getItem('circuitCity.traffic') !== 'off'
+
+            if(this.game.traffic)
+                this.game.traffic.setEnabled(!enabled)
+            else
+                localStorage.setItem('circuitCity.traffic', enabled ? 'off' : 'on')
 
             update()
         })

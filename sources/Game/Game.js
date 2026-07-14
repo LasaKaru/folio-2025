@@ -54,6 +54,10 @@ import { Character } from './Character.js'
 import { Enemies } from './Enemies.js'
 import { Story } from './Story.js'
 import { Garage } from './Garage.js'
+import { Store } from './Store.js'
+import { Traffic } from './Traffic.js'
+import { PhotoMode } from './PhotoMode.js'
+import { Keybinds } from './Keybinds.js'
 import { VehicleHealth } from './VehicleHealth.js'
 import { Leaderboard } from './Leaderboard.js'
 import { BossMode } from './BossMode.js'
@@ -231,14 +235,18 @@ export class Game
         this.enemies = new Enemies()
         this.leaderboard = new Leaderboard()
         this.story = new Story()
-        this.garage = new Garage()
         this.vehicleHealth = new VehicleHealth()
+        this.partner = new Partner()
+        this.garage = new Garage()
+        this.store = new Store()
         this.survival = new Survival()
         this.bossMode = new BossMode()
         this.dailyChallenge = new DailyChallenge()
-        this.partner = new Partner()
         this.multiplayer = new Multiplayer()
         this.miniMap = new MiniMap()
+        this.traffic = new Traffic()
+        this.photoMode = new PhotoMode()
+        this.keybinds = new Keybinds()
         this.overlay = new Overlay()
 
         // Pre-render if quality high

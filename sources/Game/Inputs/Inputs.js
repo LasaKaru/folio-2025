@@ -178,6 +178,13 @@ export class Inputs
 
             this.actions.set(action.name, formatedAction)
         }
+
+        // Some systems (e.g. World/Whispers.js) register their actions well
+        // after startup, as part of the staged world-loading sequence --
+        // Keybinds.js listens for this to pick up their real default keys
+        // whenever they actually show up, instead of only at startup.
+        if(actions.length > 0)
+            this.events.trigger('actionsAdded', [ actions ])
     }
 
     checkCategory(action)

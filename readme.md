@@ -19,13 +19,19 @@ Built as a heavily remixed edition of [Bruno Simon's folio-2025](https://github.
 - **Missions & side activities** — 13 missions (checkpoints, orb collection, timed deliveries), plus taxi fares, stunt jumps and rampage timers
 - **Daily challenge** — one rotating objective a day (drive/kill/mission-based), shown in the HUD, for a credit bonus
 - **Secrets** — a hidden door tucked behind the map's waterfall unlocks an exclusive truck paint; 6 collectible eggs are scattered around the island; finding **all 6** secretly unlocks a **Partner** — an AI ally who fights alongside you on foot (`P` to summon/bench once unlocked)
+- **Cosmetic store** — a few paints/outfits are real-money-only, sold cosmetic-only (no stat effect) through a self-hostable Stripe Checkout scaffold (`server/store.js`); everything else stays credit-only
 - **Citizens & wildlife** — pedestrians, wandering deer near the tree groves, and small bird flocks circling a few landmarks
 - **Three home bases** — Havoc Compound, Northside Garage and Old Port Yard, each walled with watchtowers, a helipad and its own respawn point
 - **Bigger world** — villages, a downtown skyline, a shop strip, ponds, a waterfall, shore stones and many tree groves
 - **Minimap** — a always-on radar in the bottom-left corner (missions, bases, story objective, other players), `N` to toggle
 - **Real pause** — pressing `ESC` opens the menu **and freezes the world** (physics, enemies, timers) until you close it, like a proper pause screen
+- **Vehicle classes** — the Garage sells two extra truck classes (Interceptor: fast and fragile; Juggernaut: slow and tanky) alongside the balanced starting Havoc Hauler, each with distinct engine/boost/handling/HP tradeoffs
+- **Partner upgrades** — once unlocked, spend credits on the partner's damage and attack speed, or unlock a second partner to fight alongside the first
+- **Background traffic** — AI-driven vehicles loop fixed routes across the island (Options → Traffic to toggle)
+- **Photo mode** — `K` for a free camera (drag to orbit, wheel to zoom) with color filters (`F` to cycle) and the HUD hidden, for clean screenshots
+- **Key rebinding** — Menu → Options → Key bindings lets you remap any of the single-key actions (shoot, camera, garage, minimap, partner, photo mode, etc.) to whatever key you like
 - **Multiplayer** — a lightweight client (`Multiplayer.js`) renders other connected players as ghost cars, with room codes (Menu → Multiplayer, "Join room") and live text chat; ships with a self-hostable reference relay server (`server/`)
-- **New options** — citizens on/off, Neon/Classic color theme, mission HUD toggle, volume, look sensitivity, difficulty
+- **New options** — citizens/traffic on/off, Neon/Classic color theme, mission HUD toggle, volume, look sensitivity, difficulty, key bindings
 - **Rebranded** — HelaO2 Studio branding, splash screen, credits page with Support/Follow links
 
 ### Controls
@@ -43,11 +49,12 @@ Built as a heavily remixed edition of [Bruno Simon's folio-2025](https://github.
 | `M` | Open the map (fast-travel pins for every district and base) |
 | `N` | Toggle the minimap |
 | `P` | Summon / bench your partner (once unlocked) |
+| `K` | Photo mode (free camera + filters) |
 | `ENTER` | Interact (secret door, easter eggs, NPCs) |
 | `R` | Respawn |
 | `ESC` | Pause and open the menu |
 
-The in-game HUD also shows contextual hints for whichever mode you're in (driving vs. on foot), and the full list is always in **Menu → Controls**.
+The in-game HUD also shows contextual hints for whichever mode you're in (driving vs. on foot), and the full list is always in **Menu → Controls**. Most single-key actions above can be remapped in **Menu → Options → Key bindings**.
 
 ### Secrets
 
@@ -67,25 +74,41 @@ npm run server
 # then in .env: VITE_SERVER_URL=ws://localhost:8080
 ```
 
-See `server/README.md` for details and limitations — it's a minimal reference relay (no auth, no persistence), not a production backend.
+See `server/README.md` for details and limitations — it's a minimal reference relay (no auth, no persistence), not a production backend. For what a real hosted backend (persistent rooms, matchmaking) would look like, see `server/ARCHITECTURE.md` — a design doc, not shipped code.
+
+## Cosmetic store (optional)
+
+A few paints/outfits are sold for real money — cosmetic only, same as
+every credit-bought item, no stats attached. Powered by a self-hostable
+Stripe Checkout scaffold:
+
+```bash
+npm install
+STRIPE_SECRET_KEY=sk_test_xxx STRIPE_WEBHOOK_SECRET=whsec_xxx npm run store
+# then in .env: VITE_STORE_URL=http://localhost:8081
+```
+
+Without it configured, premium Garage rows are visible but not
+purchasable — see `server/STORE.md` for full setup (getting Stripe keys,
+webhook forwarding, going live, adding new items).
 
 ## Where this could go next
 
 Ideas that would keep pushing this toward a "real" shipped game, roughly grouped by what they need:
 
 **Pure client-code (buildable directly, no new infrastructure)**
-- More partner types/upgrades (unlock a second companion, or let the Garage upgrade the partner's damage/HP)
-- Vehicle variety — 2-3 truck classes with distinct handling, unlocked via credits
-- NPC traffic AI — other vehicles driving the roads, not just pedestrians
-- Photo mode — free camera + filters for screenshots
+- ~~More partner types/upgrades~~ — done: Garage-purchasable damage/attack-speed upgrades plus a second companion slot
+- ~~Vehicle variety~~ — done: Interceptor and Juggernaut classes in the Garage, alongside the starting Havoc Hauler
+- ~~NPC traffic AI~~ — done: background vehicles loop fixed routes (Options → Traffic to toggle)
+- ~~Photo mode~~ — done: free camera + color filters, `K` to toggle
 - More story chapters / a "New Game+" with scaled-up enemy difficulty
 - Weather-driven missions (races only available at night, in rain, etc.)
-- A proper settings-driven key-rebinding UI (currently controls are fixed)
+- ~~A proper settings-driven key-rebinding UI~~ — done: Menu → Options → Key bindings
 
 **Needs a decision or infrastructure (business/hosting-shaped, not just code)**
-- A real hosted multiplayer backend (persistent rooms, matchmaking, anti-cheat) — the current relay is a self-hosted reference implementation only
+- ~~A real hosted multiplayer backend~~ — design doc done, see `server/ARCHITECTURE.md` (persistent rooms, matchmaking, scaling notes). Not deployed — needs your own database + hosting to actually run
 - Cloud save / accounts, so progress isn't tied to one browser's localStorage
-- Monetization model — cosmetic-only purchases (paints/outfits) fit this game's shape best; avoid pay-to-win on upgrades
+- ~~Monetization model~~ — cosmetic-only Stripe Checkout scaffold done, see **Cosmetic store** above. Needs your own Stripe account to actually take payments
 - ~~Platform packaging~~ — done, see **Desktop build (Electron)** below. Publishing it to itch.io/Steam still needs your own account/credentials
 
 ## Setup
