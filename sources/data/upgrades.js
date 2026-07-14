@@ -58,4 +58,22 @@ export const weaponSkins = {
     royal:   { name: 'Royal Rounds', cost: 500, color: '#c58bff' },
 }
 
+// Vehicle classes: multipliers stack on top of the per-stat Garage upgrades
+// above (truckUpgrades), same underlying engine/boost/handling stats, just a
+// different starting profile. healthMultiplier (default 1) scales the
+// truck's max HP (VehicleHealth.js) -- no separate "vehicle HP upgrade"
+// track, the class itself carries that tradeoff.
+export const vehicleClasses = {
+    hauler:      { name: 'Havoc Hauler', description: 'Balanced all-rounder — the truck you start with', cost: 0, engine: 1, boost: 1, handling: 1, healthMultiplier: 1 },
+    interceptor: { name: 'Interceptor', description: 'Faster and sharper — trades armor for speed', cost: 2200, engine: 1.15, boost: 1.4, handling: 1.3, healthMultiplier: 0.75 },
+    juggernaut:  { name: 'Juggernaut', description: 'Slower to turn, hits like a wall, shrugs off damage', cost: 2600, engine: 1.3, boost: 0.85, handling: 0.65, healthMultiplier: 1.6 },
+}
+
+export const partnerUpgrades = {
+    damage: { name: 'Partner damage', description: 'Your partner hits harder', max: 5, baseCost: 250, growth: 1.5, step: 0.3 },
+    rate:   { name: 'Partner attack speed', description: 'Your partner attacks more often', max: 5, baseCost: 260, growth: 1.5, step: 0.15 },
+}
+
+export const partnerSecondCost = 5000
+
 export const getUpgradeCost = (definition, level) => cost(definition.baseCost, definition.growth, level)

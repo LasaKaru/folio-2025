@@ -1,0 +1,32 @@
+.photo-mode-hint
+    display none
+    position fixed
+    left 50%
+    bottom 24px
+    transform translateX(-50%)
+    padding 8px 16px
+    border-radius 8px
+    background alpha(#100022, 0.55)
+    border 1px solid alpha(#00e5ff, 0.35)
+    font-size 0.75rem
+    white-space nowrap
+    pointer-events none
+    z-index 20
+
+    .key
+        display inline-block
+        padding 0 5px
+        margin 0 1px
+        border 1px solid alpha(#ffffff, 0.35)
+        border-radius 4px
+        font-weight 700
+
+html.is-photo-mode
+    .photo-mode-hint
+        display block
+
+    .havoc-hud,
+    .minimap,
+    .garage-trigger,
+    .boss-rush-trigger
+        display none !important

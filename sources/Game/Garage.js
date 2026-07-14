@@ -7,6 +7,9 @@ import {
     truckPaints,
     heroOutfits,
     weaponSkins,
+    vehicleClasses,
+    partnerUpgrades,
+    partnerSecondCost,
     getUpgradeCost,
 } from '../data/upgrades.js'
 
@@ -42,6 +45,7 @@ export class Garage
             truck: { engine: 0, boost: 0, handling: 0, ...saved.truck },
             weapon: { damage: 0, rate: 0, ...saved.weapon },
             hero: { health: 0, sprint: 0, ...saved.hero },
+            partner: { damage: 0, rate: 0, ...saved.partner },
             unlocks: { shotgun: false, rocket: false, melee: false, tripleShot: false, ...saved.unlocks },
             ownedPaints: saved.ownedPaints ?? [],
             ownedOutfits: saved.ownedOutfits ?? [ 'default' ],
@@ -49,6 +53,9 @@ export class Garage
             equippedPaint: saved.equippedPaint ?? null,
             equippedOutfit: saved.equippedOutfit ?? 'default',
             equippedSkin: saved.equippedSkin ?? 'default',
+            vehicleClass: saved.vehicleClass ?? 'hauler',
+            ownedVehicleClasses: saved.ownedVehicleClasses ?? [ 'hauler' ],
+            partnerSecondUnlocked: saved.partnerSecondUnlocked ?? false,
         }
     }
 
@@ -210,16 +217,74 @@ export class Garage
         return true
     }
 
+    purchaseVehicleClass(key)
+    {
+        const definition = vehicleClasses[key]
+
+        if(this.state.ownedVehicleClasses.includes(key))
+            return false
+
+        if(!this.canAfford(definition.cost))
+            return false
+
+        if(definition.cost > 0)
+            this.spend(definition.cost)
+
+        this.state.ownedVehicleClasses.push(key)
+        this.save()
+
+        return true
+    }
+
+    equipVehicleClass(key)
+    {
+        if(!this.state.ownedVehicleClasses.includes(key))
+            return false
+
+        this.state.vehicleClass = key
+        this.save()
+        this.applyAll()
+
+        return true
+    }
+
+    purchasePartnerSecond()
+    {
+        if(this.state.partnerSecondUnlocked)
+            return false
+
+        if(!this.canAfford(partnerSecondCost))
+            return false
+
+        this.spend(partnerSecondCost)
+        this.state.partnerSecondUnlocked = true
+        this.save()
+        this.game.partner?.unlockSecond()
+
+        return true
+    }
+
     // --- Apply to live systems ---
 
     applyAll()
     {
         const vehicle = this.game.physicalVehicle
         const character = this.game.character
+        const vehicleClass = vehicleClasses[this.state.vehicleClass] ?? vehicleClasses.hauler
 
-        vehicle.engineForceAmplitude = this.base.engine * (1 + this.state.truck.engine * truckUpgrades.engine.step)
-        vehicle.boostMultiplier = this.base.boost * (1 + this.state.truck.boost * truckUpgrades.boost.step)
-        vehicle.steeringAmplitude = this.base.handling * (1 + this.state.truck.handling * truckUpgrades.handling.step)
+        vehicle.engineForceAmplitude = this.base.engine * (1 + this.state.truck.engine * truckUpgrades.engine.step) * vehicleClass.engine
+        vehicle.boostMultiplier = this.base.boost * (1 + this.state.truck.boost * truckUpgrades.boost.step) * vehicleClass.boost
+        vehicle.steeringAmplitude = this.base.handling * (1 + this.state.truck.handling * truckUpgrades.handling.step) * vehicleClass.handling
+
+        this.game.vehicleHealth?.setMaxMultiplier(vehicleClass.healthMultiplier)
+
+        if(this.game.partner)
+        {
+            this.game.partner.applyUpgrades(
+                1 + this.state.partner.damage * partnerUpgrades.damage.step,
+                1 + this.state.partner.rate * partnerUpgrades.rate.step
+            )
+        }
 
         character.damageMultiplier = 1 + this.state.weapon.damage * weaponUpgrades.damage.step
         character.rateBonus = this.state.weapon.rate * weaponUpgrades.rate.step
@@ -342,6 +407,14 @@ export class Garage
             this.hud.content.append(repairSection)
         }
 
+        // Vehicle class
+        const classSection = this.section('🚘 Vehicle class')
+        for(const key in vehicleClasses)
+        {
+            classSection.append(this.vehicleClassRow(key, vehicleClasses[key]))
+        }
+        this.hud.content.append(classSection)
+
         // Weapon upgrades
         const weaponSection = this.section('🔫 Weapon upgrades')
         for(const key in weaponUpgrades)
@@ -381,6 +454,39 @@ export class Garage
             ))
         }
         this.hud.content.append(heroSection)
+
+        // Partner upgrades (only shown once the secret partner is unlocked)
+        if(this.game.partner?.unlocked)
+        {
+            const partnerSection = this.section('🤝 Partner upgrades')
+            for(const key in partnerUpgrades)
+            {
+                const definition = partnerUpgrades[key]
+                const level = this.state.partner[key]
+                const maxed = level >= definition.max
+                const cost = maxed ? null : this.upgradeCost(definition, level)
+
+                partnerSection.append(this.row(
+                    definition.name,
+                    definition.description,
+                    `Lv ${level}/${definition.max}`,
+                    maxed ? 'MAX' : `${cost} CR`,
+                    () => this.purchaseUpgrade('partner', key, partnerUpgrades),
+                    maxed || !this.canAfford(cost)
+                ))
+            }
+
+            partnerSection.append(this.row(
+                'Second partner',
+                'Unlock a second companion who fights alongside the first',
+                this.state.partnerSecondUnlocked ? 'OWNED' : '',
+                this.state.partnerSecondUnlocked ? '✓' : `${partnerSecondCost} CR`,
+                () => this.purchasePartnerSecond(),
+                this.state.partnerSecondUnlocked || !this.canAfford(partnerSecondCost)
+            ))
+
+            this.hud.content.append(partnerSection)
+        }
 
         // Weapon unlocks
         const unlocksSection = this.section('🧰 New weapons')
@@ -427,6 +533,39 @@ export class Garage
             skinsSection.append(this.cosmeticRow('skin', key, weaponSkins[key]))
         }
         this.hud.content.append(skinsSection)
+    }
+
+    vehicleClassRow(key, definition)
+    {
+        const owned = this.state.ownedVehicleClasses.includes(key)
+        const equipped = this.state.vehicleClass === key
+
+        let valueLabel = ''
+        let buttonLabel = ''
+        let action = null
+        let disabled = false
+
+        if(equipped)
+        {
+            valueLabel = 'EQUIPPED'
+            buttonLabel = '✓'
+            disabled = true
+        }
+        else if(owned)
+        {
+            valueLabel = 'OWNED'
+            buttonLabel = 'Equip'
+            action = () => this.equipVehicleClass(key)
+        }
+        else
+        {
+            valueLabel = ''
+            buttonLabel = `${definition.cost} CR`
+            action = () => this.purchaseVehicleClass(key) && this.equipVehicleClass(key)
+            disabled = !this.canAfford(definition.cost)
+        }
+
+        return this.row(definition.name, definition.description, valueLabel, buttonLabel, action ?? (() => false), disabled)
     }
 
     cosmeticRow(kind, key, definition)

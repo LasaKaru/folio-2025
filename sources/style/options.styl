@@ -1,3 +1,12 @@
+.keybind-capture
+    position fixed
+    top -100px
+    left -100px
+    width 1px
+    height 1px
+    opacity 0
+    pointer-events none
+
 .menu .contents .options-content
 
     .content-inner
@@ -30,6 +39,23 @@
 
                 &.audio-off
                     display block
+
+    .keybinds-title
+        margin 4px 0 10px
+        font-family "Amatic SC", sans-serif
+        font-weight 700
+        font-size 1.4rem
+        color #00e5ff
+
+    .keybind-row
+        width 100%
+
+        .keybind-key
+            min-width 90px
+
+            &.is-listening
+                color #ffd23f
+                border-color #ffd23f
 
     .button
         display flex
